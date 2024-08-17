@@ -1,0 +1,239 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: common-life-server-tab-config
+data:
+  config.yml: |
+    # Detailed explanation of all options available at https://github.com/NEZNAMY/TAB/wiki/config.yml
+    header-footer:
+      enabled: true
+      disable-in-worlds:
+      - disabledworld
+      disable-in-servers:
+      - disabledserver
+      header:
+      - '&7ようこそ、 &f%player% &7さん！'
+      - '&8------------------------------------------------'
+      - '&7PING: %condition:ping% &7ms'
+      - '&7TPS: %condition:tps% &7/ 20.00'
+      - '&7オンラインプレイヤー: &a%condition:safe_online%&7人'
+      - '&7現在地: &f%condition:server_name% &7- %player_world%'
+      - '%condition:header_money%'
+      - '%condition:header_debug_client_version%'
+      - '%condition:header_debug_primary_group%'
+      - '&8------------------------------------------------'
+      footer:
+      - '%animation:azisaba%'
+      per-server: {}
+    tablist-name-formatting:
+      enabled: true
+      align-tabsuffix-on-the-right: false
+      character-width-overrides: {}
+      anti-override: true
+      disable-in-worlds:
+      - disabledworld
+      disable-in-servers:
+      - disabledserver
+    scoreboard-teams:
+      enabled: true
+      enable-collision: false
+      invisible-nametags: false
+      anti-override: true
+      sorting-types:
+      - PLACEHOLDER_HIGH_TO_LOW:%primary_group_weight%
+      - PLACEHOLDER_A_TO_Z:%display_name%
+      disable-in-worlds: []
+      disable-in-servers: []
+      case-sensitive-sorting: false
+      unlimited-nametag-mode:
+        enabled: false
+    yellow-number-in-tablist:
+      enabled: false
+      value: '%ping%'
+      disable-in-worlds:
+      - disabledworld
+      disable-in-servers:
+      - disabledserver
+    global-playerlist:
+      enabled: true
+      display-others-as-spectators: false
+      display-vanished-players-as-spectators: true
+      isolate-unlisted-servers: false
+      update-latency: false
+      spy-servers:
+      - spyserver1
+      - spyserver2
+      server-groups: {}
+    belowname-objective:
+      enabled: false
+      number: '%health%'
+      text: '&cHealth'
+      disable-in-worlds:
+      - disabledworld
+      disable-in-servers:
+      - disabledserver
+    prevent-spectator-effect:
+      enabled: true
+    bossbar:
+      enabled: false
+      toggle-command: /bossbar
+      remember-toggle-choice: false
+      hidden-by-default: false
+      disable-in-worlds:
+      - disabledworld
+      disable-in-servers:
+      - disabledserver
+      bars:
+        ServerInfo:
+          style: PROGRESS
+          color: '%animation:barcolors%'
+          progress: '100'
+          text: '&fWebsite: &bwww.domain.com'
+    scoreboard:
+      enabled: false
+      toggle-command: /sb
+      remember-toggle-choice: false
+      hidden-by-default: false
+      use-numbers: false
+      static-number: 0
+      delay-on-join-milliseconds: 0
+      respect-other-plugins: true
+      disable-in-worlds:
+      - disabledworld
+      disable-in-servers:
+      - disabledserver
+      scoreboards:
+        scoreboard1:
+          title: Default
+          lines:
+          - '%animation:MyAnimation1%'
+          - '&6My Stats:'
+          - '* &eKills&7: &f%statistic_player_kills%'
+          - '* &eDeaths&7: &f%statistic_deaths%'
+          - '* &eHealth&7: &f%health%'
+          - ''
+          - '&6Personal Info:'
+          - '* &bRank&7: &f%rank%'
+          - '* &bPing&7: &f%ping%&7ms'
+          - '* &bWorld&7: &f%world%'
+          - '%animation:MyAnimation1%'
+    ping-spoof:
+      enabled: false
+      value: 0
+    placeholders:
+      date-format: dd.MM.yyyy
+      time-format: '[HH:mm:ss / h:mm a]'
+      time-offset: 0
+    placeholder-output-replacements: {}
+    conditions:
+      server_name:
+        conditions:
+        - 'permission:azisaba.view_pod_name'
+        type: OR
+        true: '${CFG_POD_NAME}'
+        false: '${CFG_APP_NAME}'
+      header_money:
+        conditions:
+        - '%money%>=0.01'
+        - '%money%<=-0.01'
+        type: OR
+        true: '&7所持金: &f%money_formatted%'
+        false: 'null'
+      header_debug_client_version:
+        conditions:
+        - '%gamemode%=creative'
+        true: '&7&oクライアントバージョン: &f%player-version%'
+        false: 'null'
+      header_debug_primary_group:
+        conditions:
+        - '%gamemode%=creative'
+        true: '&7&o権限: &f%primary_group%'
+        false: 'null'
+      safe_online:
+        conditions:
+        - permission:essentials.vanish
+        - permission:essentials.vanish.*
+        - permission:essentials.vanish.see
+        - permission:essentials.*
+        type: OR
+        true: '%player_count%'
+        false: '%safe_player_count%'
+      nick:
+        conditions:
+        - '%player%=%essentials_nickname%'
+        true: '%player%'
+        false: ~%essentials_nickname%
+      afk:
+        conditions:
+        - '%essentials_afk%=true'
+        true: '&6☽'
+        false: '&a●'
+      vanish:
+        conditions:
+        - '%essentials_vanished%=true'
+        true: '&f○'
+        false: '%condition:afk%'
+      ping_worst:
+        conditions:
+        - '%ping%>=150'
+        true: '&c%ping%'
+        false: ''
+      ping_bad:
+        conditions:
+        - '%ping%<150'
+        true: '&e%ping%'
+        false: '%condition:ping_worst%'
+      ping_normal:
+        conditions:
+        - '%ping%<100'
+        true: '&d%ping%'
+        false: '%condition:ping_bad%'
+      ping:
+        conditions:
+        - '%ping%<50'
+        true: '&a%ping%'
+        false: '%condition:ping_normal%'
+      tps_bad:
+        conditions:
+        - '%tps%>18'
+        true: '&e%tps_formatted%'
+        false: '&c%tps_formatted%'
+      tps_good:
+        conditions:
+        - '%tps%>19'
+        true: '&a%tps_formatted%'
+        false: '%condition:tps_bad%'
+      tps:
+        conditions:
+        - '%tps%>20'
+        true: '&b%tps_formatted%'
+        false: '%condition:tps_good%'
+    placeholderapi-refresh-intervals:
+      default-refresh-interval: 500
+      server:
+        '%server_uptime%': 1000
+        '%server_tps_1_colored%': 1000
+      player:
+        '%player_health%': 200
+        '%player_ping%': 1000
+        '%vault_prefix%': 1000
+      relational:
+        '%rel_factionsuuid_relation_color%': 1000
+    assign-groups-by-permissions: false
+    use-primary-group: true
+    primary-group-finding-list:
+    - default
+    debug: false
+    mysql:
+      enabled: false
+      host: 127.0.0.1
+      port: 3306
+      database: tab
+      username: user
+      password: password
+    use-bukkit-permissions-manager: true
+    use-online-uuid-in-tablist: true
+    fix-pet-names:
+      enabled: false
+    per-world-playerlist:
+      enabled: false
