@@ -73,9 +73,6 @@ spec:
           # JVMオプション
           - name: JVM_OPTS
             value: "-javaagent:Log4j2Fix-1.0.4.jar=l -XX:MaxJavaStackTraceDepth=999999"
-          # 再起動前にアナウンスする
-          - name: STOP_SERVER_ANNOUNCE_DELAY
-            value: "120"
           # yml内のCFG_なんとかを置き換えるためのもの
           - name: ENV_VARIABLE_PREFIX
             value: "CFG_"
@@ -160,7 +157,7 @@ spec:
           path: /srv/lifetown/plugins/FastAsyncWorldEdit/schematics
           type: Directory
       priorityClassName: minecraft-other-server
-      terminationGracePeriodSeconds: 180 # 3分
+      terminationGracePeriodSeconds: 60 # 1分
 ---
 apiVersion: v1
 kind: Service
