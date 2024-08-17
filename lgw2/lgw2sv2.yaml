@@ -41,7 +41,6 @@ spec:
             memory: "12Gi" # (MAX_)MEMORY + 4Gぐらいにするのがいいらしい
         ports:
           - containerPort: 25565
-          - containerPort: 8100
         env:
           # タイムゾーン
           - name: TZ
@@ -110,6 +109,9 @@ spec:
           mountPath: /data/plugins/LeonGunWar/main.yml
           subPath: plugins/LeonGunWar/main.yml
           readOnly: true
+        - name: lgw2-data
+          mountPath: /data/shared
+          subPath: shared
         - name: lgw2-data
           mountPath: /data/plugins/LeonCSAddon
           subPath: plugins/LeonCSAddon
