@@ -143,3 +143,16 @@ spec:
           name: common-life-server-tab-config
       priorityClassName: minecraft-other-server
       terminationGracePeriodSeconds: 60 # 1分
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-lifebuild-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: server-lifebuild
+    stage: production
+  ports:
+    - port: 25565
+      targetPort: 25565
