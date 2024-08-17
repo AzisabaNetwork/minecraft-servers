@@ -5,21 +5,21 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: lifebuild
+      app: server-lifebuild
   strategy:
     type: Recreate
   revisionHistoryLimit: 2
   template:
     metadata:
       labels:
-        app: lifebuild
+        app: server-lifebuild
         stage: production
         kuvel.azisaba.net/enable-server-discovery: "true"
         kuvel.azisaba.net/preferred-server-name: lifebuild
     spec:
       nodeName: saba9
       containers:
-      - name: lifebuild
+      - name: server-lifebuild
         # Dockerイメージの指定
         # java11の11の部分を8にしたり17にしたりなど、Minecraftバージョンによって適宜変えてください
         # Javaバージョン早見表
@@ -38,7 +38,7 @@ spec:
             memory: "5Gi"
           limits:
             cpu: "4000m"
-            memory: "8Gi"
+            memory: "9Gi" # (MAX_)MEMORY + 4Gぐらいにするのがいいらしい
         ports:
           - containerPort: 25565
         env:
