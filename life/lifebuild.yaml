@@ -84,6 +84,9 @@ spec:
           # UID (変更しないでください)
           - name: UID
             value: "0"
+          # GID
+          - name: GID
+            value: "1015"
           # Minecraftバージョン
           - name: VERSION
             value: 1.15.2
