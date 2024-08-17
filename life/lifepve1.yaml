@@ -96,9 +96,6 @@ spec:
           # ホワイトリスト
           - name: ENABLE_WHITELIST
             value: "false"
-          # RCON
-          - name: ENABLE_RCON
-            value: "false"
           # JVM -Dオプション
           - name: JVM_DD_OPTS
             value: "log4j2Fix.loadReflectionUtil:true"
@@ -148,6 +145,12 @@ spec:
         - name: itemfixer-data
           mountPath: /data/plugins/ItemFixer
           readOnly: true
+        - name: pve1-data
+          mountPath: /data/.rcon-cli.env
+          subPath: .rcon-cli.env
+        - name: pve1-data
+          mountPath: /data/.rcon-cli.yaml
+          subPath: .rcon-cli.yaml
         - name: pve1-data
           mountPath: /data/ops.json
           subPath: ops.json
