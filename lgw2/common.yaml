@@ -17,8 +17,8 @@ data:
       - '&7PING: %condition:ping% &7ms'
       - '&7TPS: %condition:tps% &7/ 20.00'
       - '&7オンラインプレイヤー: &a%condition:safe_online%&7人'
-      - '&7現在地: &f%condition:server_name% &7- %player_world%'
-      - '&7所持金: &f%money_formatted%'
+      - '&7現在地: &f%condition:server_name% &7- %condition:world%'
+      - '%condition:header_money%'
       - '&8------------------------------------------------'
       footer:
       - '%animation:azisaba%'
@@ -132,11 +132,16 @@ data:
         false: '${CFG_SERVER_NAME}'
       header_money:
         conditions:
-        - '%money%>=0.01'
-        - '%money%<=-0.01'
+        - '%vault_eco_balance_commas%>=0.01'
+        - '%vault_eco_balance_commas%<=-0.01'
         type: OR
-        true: '&7所持金: &f%money_formatted%'
-        false: 'null'
+        true: '&7所持金: &b%vault_eco_balance_commas% &6$'
+        false: '&7所持金: &b0 &6$'
+      world:
+        conditions:
+        - '%world%=world'
+        true: ロビー
+        false: '%world%'
       header_debug_client_version:
         conditions:
         - '%gamemode%=creative'
@@ -154,8 +159,8 @@ data:
         - permission:essentials.vanish.see
         - permission:essentials.*
         type: OR
-        true: '%player_count%'
-        false: '%safe_player_count%'
+        true: '%serveronline%'
+        false: '%essentials_safe_online%'
       nick:
         conditions:
         - '%player%=%essentials_nickname%'
@@ -194,17 +199,17 @@ data:
       tps_bad:
         conditions:
         - '%tps%>18'
-        true: '&e%tps_formatted%'
-        false: '&c%tps_formatted%'
+        true: '&e%tps%'
+        false: '&c%tps%'
       tps_good:
         conditions:
         - '%tps%>19'
-        true: '&a%tps_formatted%'
+        true: '&a%tps%'
         false: '%condition:tps_bad%'
       tps:
         conditions:
         - '%tps%>20'
-        true: '&b%tps_formatted%'
+        true: '&b%tps%'
         false: '%condition:tps_good%'
     placeholderapi-refresh-intervals:
       default-refresh-interval: 500
