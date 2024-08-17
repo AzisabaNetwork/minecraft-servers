@@ -146,14 +146,14 @@ spec:
           mountPath: /data/plugins/ItemFixer
           readOnly: true
         - name: pve1-data
-          mountPath: /data/.paper.env
-          subPath: .paper.env
-        - name: pve1-data
           mountPath: /data/.rcon-cli.env
           subPath: .rcon-cli.env
         - name: pve1-data
           mountPath: /data/.rcon-cli.yaml
           subPath: .rcon-cli.yaml
+        - name: pve1-data
+          mountPath: /data/.paper.env
+          subPath: .paper.env
         - name: pve1-data
           mountPath: /data/ops.json
           subPath: ops.json
