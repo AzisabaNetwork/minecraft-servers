@@ -131,7 +131,7 @@ data:
         - 'permission:azisaba.view_pod_name'
         type: OR
         true: '${CFG_POD_NAME}'
-        false: '${CFG_APP_NAME}'
+        false: '${CFG_SERVER_NAME}'
       header_money:
         conditions:
         - '%money%>=0.01'
