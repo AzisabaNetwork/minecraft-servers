@@ -172,7 +172,9 @@ spec:
     app: server-lifetown
     stage: production
   ports:
-    - port: 25565
+    - name: minecraft
+      port: 25565
       targetPort: 25565
-    - port: 8100
+    - name: bluemap
+      port: 8100
       targetPort: 8100
