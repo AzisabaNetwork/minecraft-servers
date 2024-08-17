@@ -33,7 +33,7 @@ data:
       disable-in-servers:
       - disabledserver
     scoreboard-teams:
-      enabled: true
+      enabled: false
       enable-collision: false
       invisible-nametags: false
       anti-override: true
