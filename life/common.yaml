@@ -18,9 +18,7 @@ data:
       - '&7TPS: %condition:tps% &7/ 20.00'
       - '&7オンラインプレイヤー: &a%condition:safe_online%&7人'
       - '&7現在地: &f%condition:server_name% &7- %player_world%'
-      - '%condition:header_money%'
-      - '%condition:header_debug_client_version%'
-      - '%condition:header_debug_primary_group%'
+      - '&7所持金: &f%money_formatted%'
       - '&8------------------------------------------------'
       footer:
       - '%animation:azisaba%'
