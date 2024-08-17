@@ -155,6 +155,9 @@ spec:
           mountPath: /data/.paper.env
           subPath: .paper.env
         - name: pve1-data
+          mountPath: /data/.papermc-manifest.json
+          subPath: .papermc-manifest.json
+        - name: pve1-data
           mountPath: /data/ops.json
           subPath: ops.json
         - name: pve1-data
