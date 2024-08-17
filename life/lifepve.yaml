@@ -188,7 +188,7 @@ spec:
           type: Directory
       - name: tab-config
         configMap:
-          name: common-life-server-tab-config
+          name: common-life-server-tab-config-with-pvelevel
       priorityClassName: minecraft-other-server
       terminationGracePeriodSeconds: 180 # 3分
 ---
