@@ -96,6 +96,9 @@ spec:
           # ホワイトリスト
           - name: ENABLE_WHITELIST
             value: "false"
+          # RCON
+          - name: ENABLE_RCON
+            value: "false"
           # JVM -Dオプション
           - name: JVM_DD_OPTS
             value: "log4j2Fix.loadReflectionUtil:true"
