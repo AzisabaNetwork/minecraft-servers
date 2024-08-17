@@ -17,7 +17,7 @@ spec:
         kuvel.azisaba.net/enable-server-discovery: "true"
         kuvel.azisaba.net/preferred-server-name: lifebuild
     spec:
-      nodeName: saba9
+      nodeName: saba9 # ノードの名前
       containers:
       - name: server-lifebuild
         # Dockerイメージの指定
