@@ -142,6 +142,9 @@ spec:
         - name: server-data
           mountPath: /data
           readOnly: true
+        - name: server-data
+          mountPath: /data/plugins/MythicMobs
+          subPath: plugins/MythicMobs
         - name: itemfixer-data
           mountPath: /data/plugins/ItemFixer
           readOnly: true
