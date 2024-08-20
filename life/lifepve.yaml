@@ -66,9 +66,9 @@ spec:
           # ネザーを有効にする
           - name: ALLOW_NETHER
             value: "false"
-          # "Flying is not enabled on this server"を有効にする
+          # "Flying is not enabled on this server"を無効にする
           - name: ALLOW_FLIGHT
-            value: "false"
+            value: "true"
           # 描画距離
           - name: VIEW_DISTANCE
             value: "10"
