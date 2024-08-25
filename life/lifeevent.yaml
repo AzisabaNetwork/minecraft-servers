@@ -38,7 +38,7 @@ spec:
             memory: "5Gi"
           limits:
             cpu: "10000m"
-            memory: "14Gi" # (MAX_)MEMORY + 4Gぐらいにするのがいいらしい
+            memory: "15Gi" # (MAX_)MEMORY + 4Gぐらいにするのがいいらしい
         ports:
           - containerPort: 25565
         env:
