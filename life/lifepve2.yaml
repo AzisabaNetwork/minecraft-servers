@@ -35,10 +35,10 @@ spec:
         resources:
           requests:
             cpu: "1000m"
-            memory: "3Gi"
+            memory: "5Gi"
           limits:
             cpu: "6000m"
-            memory: "9Gi" # (MAX_)MEMORY + 4Gぐらいにするのがいいらしい
+            memory: "15Gi" # (MAX_)MEMORY + 4Gぐらいにするのがいいらしい
         ports:
           - containerPort: 25565
         env:
@@ -92,7 +92,7 @@ spec:
             value: 1.15.2
           # 初期・最大メモリ
           - name: MEMORY
-            value: 5G
+            value: 10G
           # ホワイトリスト
           - name: ENABLE_WHITELIST
             value: "false"
