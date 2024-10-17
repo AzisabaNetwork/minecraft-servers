@@ -128,6 +128,10 @@ spec:
           mountPath: /data/plugins/CrackShotPlus
           subPath: plugins/CrackShotPlus
           readOnly: true
+        - name: lgw2-data
+          mountPath: /data/plugins/AgetarouUniqueGuns
+          subPath: plugins/AgetarouUniqueGuns
+          readOnly: true
         - name: tab-config
           mountPath: /plugins/TAB/config.yml
           subPath: config.yml
