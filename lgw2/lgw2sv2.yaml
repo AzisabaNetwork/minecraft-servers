@@ -132,6 +132,10 @@ spec:
           mountPath: /data/plugins/AgetarouUniqueGuns
           subPath: plugins/AgetarouUniqueGuns
           readOnly: true
+        - name: lgw2-data
+          mountPath: /data/plugins/NameChangeAutomation/NameChangeInfo
+          subPath: plugins/NameChangeAutomation/NameChangeInfo
+          readOnly: true
         - name: tab-config
           mountPath: /plugins/TAB/config.yml
           subPath: config.yml
