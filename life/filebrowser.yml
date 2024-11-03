@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: filebrowser-life
+  namespace: minecraft
+spec:
+  selector:
+    matchLabels:
+      app: filebrowser-life
+  replicas: 1
+  revisionHistoryLimit: 2
+  template:
+    metadata:
+      labels:
+        app: filebrowser-life
+    spec:
+      containers:
+      - name: filebrowser-life
+        image: filebrowser/filebrowser
+        volumeMounts:
+        - mountPath: /database
+          name: filebrowser-database
+        - mountPath: /.filebrowser.json
+          name: filebrowser-config
+          subPath: ".filebrowser.json"
+        - mountPath: /srv/lifenewpve
+          name: lifenewpve-data
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "100Mi"
+          limits:
+            cpu: "100m"
+            memory: "500Mi"
+        ports:
+        - containerPort: 80
+      volumes:
+      - name: filebrowser-database
+        persistentVolumeClaim:
+          claimName: filebrowser-life-database
+      - name: filebrowser-config
+        configMap:
+          name: filebrowser-life-config
+      - name: lifenewpve-data
+        persistentVolumeClaim:
+          claimName: server-lifenewpve-data-claim
+      # priorityClassName: minecraft-other-server
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: filebrowser-life-config
+data:
+  .filebrowser.json: |
+    {
+      "port": 80,
+      "baseURL": "",
+      "address": "",
+      "log": "stdout",
+      "database": "/database/filebrowser.db",
+      "root": "/srv"
+    }
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: filebrowser-life-database
+spec:
+  storageClassName: nfs-client
+  accessModes:
+  - "ReadWriteMany"
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: filebrowser-life-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: filebrowser-life
+  ports:
+    - port: 80
+      targetPort: 80
