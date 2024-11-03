@@ -17,8 +17,6 @@ spec:
         kuvel.azisaba.net/enable-server-discovery: "true"
         kuvel.azisaba.net/preferred-server-name: <server-name>
     spec:
-      # サーバーを動かしたい物理サーバーを指定する
-      nodeName: saba8
       containers:
         - name: server-<server-name>
           # Dockerイメージの指定
@@ -54,12 +52,6 @@ spec:
             # 最適化されたJVMフラグを使用する
             - name: USE_AIKAR_FLAGS
               value: "true"
-            # UID
-            - name: UID
-              value: "0"
-            # GID
-            - name: GID
-              value: "1021"
             # Minecraftバージョン
             - name: VERSION
               value: 1.16.5
@@ -110,14 +102,25 @@ spec:
               subPath: config.yml
       volumes:
         - name: server-data
-          hostPath:
-            path: /srv/<server-name>
-            type: Directory
+          persistentVolumeClaim:
+            claimName: server-<server-name>-data-claim
         - name: tab-config
           configMap:
             name: common-life-server-tab-config
       priorityClassName: minecraft-other-server
       terminationGracePeriodSeconds: 60 # 1分
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: server-<server-name>-data-claim
+spec:
+  storageClassName: nfs-client
+  accessModes:
+  - "ReadWriteMany"
+  resources:
+    requests:
+      storage: 50Gi
 ---
 apiVersion: v1
 kind: Service
