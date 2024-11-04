@@ -109,7 +109,7 @@ spec:
             claimName: server-lifenewpve-data-claim
         - name: tab-config
           configMap:
-            name: common-life-server-tab-config
+            name: common-life-server-tab-config-with-pvelevel
       priorityClassName: minecraft-other-server
       terminationGracePeriodSeconds: 60 # 1分
 ---
