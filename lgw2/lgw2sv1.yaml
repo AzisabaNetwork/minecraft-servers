@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: server-lgw2sv2
+  name: server-lgw2sv1
 spec:
   selector:
     matchLabels:
-      app: server-lgw2sv2
+      app: server-lgw2sv1
   strategy:
     type: Recreate
   revisionHistoryLimit: 2
   template:
     metadata:
       labels:
-        app: server-lgw2sv2
+        app: server-lgw2sv1
         stage: production
         kuvel.azisaba.net/enable-server-discovery: "true"
-        kuvel.azisaba.net/preferred-server-name: lgw2sv2
+        kuvel.azisaba.net/preferred-server-name: lgw2sv1
     spec:
       nodeName: saba8
       containers:
-      - name: server-lgw2sv2
+      - name: server-lgw2sv1
         # Dockerイメージの指定
         # java11の11の部分を8にしたり17にしたりなど、Minecraftバージョンによって適宜変えてください
         # Javaバージョン早見表
@@ -142,7 +142,7 @@ spec:
       volumes:
       - name: server-data
         hostPath:
-          path: /srv/lgw2sv2
+          path: /srv/lgw2sv1
           type: Directory
       - name: lgw2-data
         hostPath:
@@ -157,11 +157,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: server-lgw2sv2-svc
+  name: server-lgw2sv1-svc
 spec:
   type: ClusterIP
   selector:
-    app: server-lgw2sv2
+    app: server-lgw2sv1
     stage: production
   ports:
     - port: 25565
