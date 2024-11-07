@@ -166,11 +166,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: lifenewpve-debugger-svc
+  name: lifebuild-debugger-svc
 spec:
   type: NodePort
   selector:
-    app: server-lifenewpve
+    app: server-lifebuild
     stage: production
   ports:
     - name: debugger-port
