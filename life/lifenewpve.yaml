@@ -17,6 +17,7 @@ spec:
         kuvel.azisaba.net/enable-server-discovery: "true"
         kuvel.azisaba.net/preferred-server-name: lifenewpve
     spec:
+      nodeName: saba10 # it does not need to be on saba10, we just need to avoid saba9
       containers:
         - name: server-lifenewpve
           # Dockerイメージの指定
