@@ -34,11 +34,11 @@ spec:
         imagePullPolicy: Always
         resources:
           requests:
-            cpu: "1000m"
-            memory: "5Gi"
+            cpu: "500m"
+            memory: "1Gi"
           limits:
             cpu: "4000m"
-            memory: "9Gi" # (MAX_)MEMORY + 4Gぐらいにするのがいいらしい
+            memory: "9Gi"
         ports:
           - containerPort: 25565
         env:
@@ -91,8 +91,8 @@ spec:
           - name: VERSION
             value: 1.15.2
           # 初期・最大メモリ
-          - name: MEMORY
-            value: 5G
+          - name: MAX_MEMORY
+            value: 4G
           # ホワイトリスト
           - name: ENABLE_WHITELIST
             value: "false"

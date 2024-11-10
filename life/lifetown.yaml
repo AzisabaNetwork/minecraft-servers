@@ -34,11 +34,11 @@ spec:
         imagePullPolicy: Always
         resources:
           requests:
-            cpu: "1000m"
-            memory: "6Gi"
+            cpu: "500m"
+            memory: "4Gi"
           limits:
             cpu: "10000m"
-            memory: "17Gi" # (MAX_)MEMORY + 4Gぐらいにするのがいいらしい
+            memory: "16Gi"
         ports:
           - containerPort: 25565
           - containerPort: 8100
@@ -65,8 +65,10 @@ spec:
           - name: VERSION
             value: 1.20.2
           # 初期・最大メモリ
-          - name: MEMORY
-            value: 12G
+          - name: MAX_MEMORY
+            value: 8G
+          - name: INIT_MEMORY
+            value: 4G
           # JVM -Dオプション
           - name: JVM_DD_OPTS
             value: "log4j2Fix.loadReflectionUtil:true"
