@@ -65,7 +65,7 @@ spec:
             value: 1.16.5
           # 初期・最大メモリ
           - name: MEMORY
-            value: 8G
+            value: 4G
           # JVM -Dオプション
           - name: JVM_DD_OPTS
             value: "Paper.IgnoreJavaVersion:true"
