@@ -115,7 +115,7 @@ spec:
           type: Directory
       - name: tab-config
         configMap:
-          name: common-lgw2dev-server-tab-config
+          name: common-lgw2-server-tab-config
       priorityClassName: minecraft-other-server
       terminationGracePeriodSeconds: 60 # 1分
 ---
