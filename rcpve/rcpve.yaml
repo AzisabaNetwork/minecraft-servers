@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: server-lifenewpve
+  name: server-rcpve
 spec:
   selector:
     matchLabels:
-      app: server-lifenewpve
+      app: server-rcpve
   strategy:
     type: Recreate
   revisionHistoryLimit: 2
   template:
     metadata:
       labels:
-        app: server-lifenewpve
+        app: server-rcpve
         stage: production
         kuvel.azisaba.net/enable-server-discovery: "true"
-        kuvel.azisaba.net/preferred-server-name: lifenewpve
+        kuvel.azisaba.net/preferred-server-name: rcpve
     spec:
       nodeName: saba10 # it does not need to be on saba10, we just need to avoid saba9
       containers:
-        - name: server-lifenewpve
+        - name: server-rcpve
           # Dockerイメージの指定
           # Javaバージョン早見表
           # 1.14.4以下 ... 8
@@ -126,11 +126,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: server-lifenewpve-svc
+  name: server-rcpve-svc
 spec:
   type: ClusterIP
   selector:
-    app: server-lifenewpve
+    app: server-rcpve
     stage: production
   ports:
     - port: 25565
