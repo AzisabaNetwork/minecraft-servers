@@ -34,7 +34,7 @@ spec:
         imagePullPolicy: Always
         resources:
           requests:
-            memory: "22Gi"
+            memory: "26Gi"
         ports:
           - containerPort: 25565
         env:
@@ -65,9 +65,6 @@ spec:
           # "Flying is not enabled on this server"を無効にする
           - name: ALLOW_FLIGHT
             value: "true"
-          # 描画距離
-          - name: VIEW_DISTANCE
-            value: "10"
           # 統計情報をMojangに送信する
           - name: SNOOPER_ENABLED
             value: "false"
@@ -88,7 +85,7 @@ spec:
             value: 1.15.2
           # 初期・最大メモリ
           - name: MEMORY
-            value: 22G
+            value: 26G
           # ホワイトリスト
           - name: ENABLE_WHITELIST
             value: "false"
