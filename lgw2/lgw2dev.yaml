@@ -29,7 +29,7 @@ spec:
         # 1.17.x ... 16-17 (16はサポート終了)
         # 1.18.x～1.20.4 ... 17 (一部は21まで可能)
         # 1.20.5以降 ... 21
-        image: itzg/minecraft-server:java17
+        image: itzg/minecraft-server:java17-graalvm-ce
         workingDir: /data
         imagePullPolicy: Always
         resources:
