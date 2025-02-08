@@ -49,7 +49,7 @@ spec:
             value: PAPER
           # 最適化されたJVMフラグを使用する
           - name: USE_AIKAR_FLAGS
-            value: "false"
+            value: "true"
           # スポーン保護
           - name: SPAWN_PROTECTION
             value: "0"
@@ -94,7 +94,7 @@ spec:
             value: "log4j2Fix.loadReflectionUtil:true"
           # JVMオプション
           - name: JVM_OPTS
-            value: "-XX:+UnlockExperimentalVMOptions -XX:+UseZGC -javaagent:Log4j2Fix-1.0.4.jar=l -XX:MaxJavaStackTraceDepth=999999"
+            value: "-javaagent:Log4j2Fix-1.0.4.jar=l -XX:MaxJavaStackTraceDepth=999999"
           # View Distance
           - name: VIEW_DISTANCE
             value: "8"
