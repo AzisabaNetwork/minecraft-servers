@@ -34,8 +34,6 @@ spec:
           resources:
             requests:
               memory: "6Gi"
-            limits:
-              cpu: "10000m"
           ports:
             - containerPort: 25565
             - containerPort: 5005
