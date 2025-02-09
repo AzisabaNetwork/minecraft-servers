@@ -85,7 +85,7 @@ spec:
             value: 1.15.2
           # 初期・最大メモリ
           - name: MEMORY
-            value: 26G
+            value: 24G
           # ホワイトリスト
           - name: ENABLE_WHITELIST
             value: "false"
