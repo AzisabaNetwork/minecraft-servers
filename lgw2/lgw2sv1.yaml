@@ -53,7 +53,7 @@ spec:
             value: PAPER
           # 最適化されたJVMフラグを使用する
           - name: USE_AIKAR_FLAGS
-            value: "true"
+            value: "false"
           # UID
           - name: UID
             value: "0"
@@ -69,6 +69,8 @@ spec:
           # JVM -Dオプション
           - name: JVM_DD_OPTS
             value: "Paper.IgnoreJavaVersion:true"
+          - name: JVM_OPTS
+            value: "-XX:+AlwaysPreTouch -XX:+UseZGC -XX:AllocatePrefetchStyle=1 -XX:-ZProactive -XX:ConcGCThreads=14 -XX:+UseTransparentHugePages"
           # yml内のCFG_なんとかを置き換えるためのもの
           - name: ENV_VARIABLE_PREFIX
             value: "CFG_"
