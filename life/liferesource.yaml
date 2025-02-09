@@ -91,7 +91,7 @@ spec:
             value: 1.15.2
           # 初期・最大メモリ
           - name: MEMORY
-            value: 6G
+            value: 6G # change to 8G after lifetown closes
           # ホワイトリスト
           - name: ENABLE_WHITELIST
             value: "false"
