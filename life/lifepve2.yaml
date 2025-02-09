@@ -37,7 +37,6 @@ spec:
             memory: "8Gi"
           limits:
             cpu: "6000m"
-            memory: "15Gi" # (MAX_)MEMORY + 4Gぐらいにするのがいいらしい
         ports:
           - containerPort: 25565
         env:
@@ -91,7 +90,7 @@ spec:
             value: 1.15.2
           # 初期・最大メモリ
           - name: MEMORY
-            value: 8G
+            value: 8G # change to 10G after lifetown closes
           # ホワイトリスト
           - name: ENABLE_WHITELIST
             value: "false"
