@@ -35,9 +35,6 @@ spec:
         resources:
           requests:
             memory: "4Gi"
-          limits:
-            cpu: "4000m"
-            memory: "8Gi" # (MAX_)MEMORY + 4Gぐらいにするのがいいらしい
         ports:
           - containerPort: 25565
           - containerPort: 9225

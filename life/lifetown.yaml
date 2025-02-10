@@ -36,7 +36,6 @@ spec:
           requests:
             memory: "4Gi"
           limits:
-            cpu: "10000m"
             memory: "16Gi"
         ports:
           - containerPort: 25565
