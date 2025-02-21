@@ -1,28 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: server-mmo
+  name: server-rcpve
 spec:
   selector:
     matchLabels:
-      app: server-mmo
+      app: server-rcpve
   strategy:
     type: Recreate
   revisionHistoryLimit: 2
   template:
     metadata:
       labels:
-        app: server-mmo
+        app: server-rcpve
         stage: production
         kuvel.azisaba.net/enable-server-discovery: "true"
-        kuvel.azisaba.net/preferred-server-name: mmo
+        kuvel.azisaba.net/preferred-server-name: rcpve
     spec:
-      # サーバーを動かしたい物理サーバーを指定する
-      nodeName: saba8
+      nodeName: saba10 # it does not need to be on saba10, we just need to avoid saba9
       containers:
-        - name: server-mmo
+        - name: server-rcpve
           # Dockerイメージの指定
-          # java11の11の部分を8にしたり17にしたりなど、Minecraftバージョンによって適宜変えてください
           # Javaバージョン早見表
           # 1.14.4以下 ... 8
           # 1.15.x ... 8-11 (9-10はサポート終了)
@@ -35,13 +33,13 @@ spec:
           imagePullPolicy: Always
           resources:
             requests:
-              cpu: "1000m"
-              memory: "4Gi"
+              memory: "2Gi"
             limits:
               cpu: "10000m"
-              memory: "12Gi" # (MAX_)MEMORY + 4Gぐらいにするのがいいらしい
+              memory: "16Gi" # limitを超えるとpodが即座にOOMKilledされてしまうため(MAX_)MEMORY + 8Gぐらいにして余裕を持たせる
           ports:
             - containerPort: 25565
+            - containerPort: 5005
           env:
             # タイムゾーン
             - name: TZ
@@ -55,25 +53,15 @@ spec:
             # 最適化されたJVMフラグを使用する
             - name: USE_AIKAR_FLAGS
               value: "true"
-            # UID
-            - name: UID
-              value: "0"
-            # GID
-            - name: GID
-              value: "1012"
             # Minecraftバージョン
             - name: VERSION
-              value: "1.21.1"
-            # 初期・最大メモリ
-            - name: MEMORY
+              value: 1.21.1
+            # 最大メモリ
+            - name: MAX_MEMORY
               value: 8G
             # JVM -Dオプション
             - name: JVM_DD_OPTS
               value: "Paper.IgnoreJavaVersion:true"
-            - name: ALLOW_NETHER
-              value: "true"
-            - name: ALLOW_FLIGHT
-              value: "true"
             # yml内のCFG_なんとかを置き換えるためのもの
             - name: ENV_VARIABLE_PREFIX
               value: "CFG_"
@@ -110,22 +98,39 @@ spec:
           volumeMounts:
             - name: server-data
               mountPath: /data
+            - name: tab-config
+              mountPath: /plugins/TAB/config.yml
+              subPath: config.yml
       volumes:
         - name: server-data
-          hostPath:
-            path: /srv/mkac
-            type: Directory
+          persistentVolumeClaim:
+            claimName: server-lifenewpve-data-claim
+        - name: tab-config
+          configMap:
+            name: common-life-server-tab-config-with-pvelevel
       priorityClassName: minecraft-other-server
       terminationGracePeriodSeconds: 60 # 1分
 ---
 apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: server-lifenewpve-data-claim
+spec:
+  storageClassName: nfs-client
+  accessModes:
+  - "ReadWriteMany"
+  resources:
+    requests:
+      storage: 50Gi
+---
+apiVersion: v1
 kind: Service
 metadata:
-  name: server-mmo-svc
+  name: server-rcpve-svc
 spec:
   type: ClusterIP
   selector:
-    app: server-mmo
+    app: server-rcpve
     stage: production
   ports:
     - port: 25565

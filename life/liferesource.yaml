@@ -91,7 +91,7 @@ spec:
             value: 1.15.2
           # 初期・最大メモリ
           - name: MEMORY
-            value: 6G
+            value: 6G # change to 8G after lifetown closes
           # ホワイトリスト
           - name: ENABLE_WHITELIST
             value: "false"
@@ -173,3 +173,16 @@ spec:
   ports:
     - port: 25565
       targetPort: 25565
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-liferesource-prometheus-exporter-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: server-liferesource
+    stage: production
+  ports:
+    - port: 9225
+      targetPort: 9225

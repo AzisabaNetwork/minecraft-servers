@@ -34,7 +34,7 @@ spec:
         imagePullPolicy: Always
         resources:
           requests:
-            memory: "22Gi"
+            memory: "24Gi"
         ports:
           - containerPort: 25565
         env:
@@ -65,9 +65,6 @@ spec:
           # "Flying is not enabled on this server"を無効にする
           - name: ALLOW_FLIGHT
             value: "true"
-          # 描画距離
-          - name: VIEW_DISTANCE
-            value: "10"
           # 統計情報をMojangに送信する
           - name: SNOOPER_ENABLED
             value: "false"
@@ -88,7 +85,7 @@ spec:
             value: 1.15.2
           # 初期・最大メモリ
           - name: MEMORY
-            value: 22G
+            value: 24G
           # ホワイトリスト
           - name: ENABLE_WHITELIST
             value: "false"
@@ -97,7 +94,7 @@ spec:
             value: "log4j2Fix.loadReflectionUtil:true"
           # JVMオプション
           - name: JVM_OPTS
-            value: "-javaagent:Log4j2Fix-1.0.4.jar=l -XX:MaxJavaStackTraceDepth=999999"
+            value: "-XX:+AlwaysPreTouch -javaagent:Log4j2Fix-1.0.4.jar=l -XX:MaxJavaStackTraceDepth=999999"
           # View Distance
           - name: VIEW_DISTANCE
             value: "8"
@@ -189,3 +186,16 @@ spec:
   ports:
     - port: 8100
       targetPort: 8100
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-life-prometheus-exporter-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: server-life
+    stage: production
+  ports:
+    - port: 9225
+      targetPort: 9225

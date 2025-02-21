@@ -35,9 +35,6 @@ spec:
         resources:
           requests:
             memory: "3Gi"
-          limits:
-            cpu: "6000m"
-            memory: "9Gi" # (MAX_)MEMORY + 4Gぐらいにするのがいいらしい
         ports:
           - containerPort: 25565
         env:
@@ -200,3 +197,16 @@ spec:
   ports:
     - port: 25565
       targetPort: 25565
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-lifepve-prometheus-exporter-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: server-lifepve
+    stage: production
+  ports:
+    - port: 9225
+      targetPort: 9225
