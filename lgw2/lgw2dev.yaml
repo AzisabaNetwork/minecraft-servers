@@ -62,7 +62,7 @@ spec:
             value: "1021"
           # Minecraftバージョン
           - name: VERSION
-            value: 1.19.3
+            value: 1.16.5
           # 初期・最大メモリ
           - name: MEMORY
             value: 4G
