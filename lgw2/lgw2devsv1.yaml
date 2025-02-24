@@ -19,7 +19,7 @@ spec:
     spec:
       nodeName: saba8
       containers:
-      - name: server-lgw2sv1
+      - name: server-lgw2devsv1
         # Dockerイメージの指定
         # java11の11の部分を8にしたり17にしたりなど、Minecraftバージョンによって適宜変えてください
         # Javaバージョン早見表
