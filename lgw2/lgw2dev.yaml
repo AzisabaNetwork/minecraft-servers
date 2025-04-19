@@ -68,7 +68,7 @@ spec:
             value: 4G
           # JVM -Dオプション
           - name: JVM_DD_OPTS
-            value: "Paper.IgnoreJavaVersion:true,file.encoding:UTF-8"
+            value: "Paper.IgnoreJavaVersion:true"
           # yml内のCFG_なんとかを置き換えるためのもの
           - name: ENV_VARIABLE_PREFIX
             value: "CFG_"
