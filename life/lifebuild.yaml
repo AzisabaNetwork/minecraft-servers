@@ -29,7 +29,7 @@ spec:
         # 1.17.x ... 16-17 (16はサポート終了)
         # 1.18.x～1.20.4 ... 17
         # 1.20.5以降 ... 21
-        image: itzg/minecraft-server:java11-jdk
+        image: itzg/minecraft-server:java21
         workingDir: /data
         imagePullPolicy: Always
         resources:
@@ -94,7 +94,7 @@ spec:
             value: "false"
           # Add debugger
           - name: JVM_OPTS
-            value: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+            value: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -DPaper.IgnoreJavaVersion=true"
           # yml内のCFG_なんとかを置き換えるためのもの
           - name: ENV_VARIABLE_PREFIX
             value: "CFG_"
