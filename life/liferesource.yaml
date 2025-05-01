@@ -101,9 +101,6 @@ spec:
           # JVMオプション
           - name: JVM_OPTS
             value: "-javaagent:Log4j2Fix-1.0.4.jar=l -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -DPaper.IgnoreJavaVersion=true"
-          # View Distance
-          - name: VIEW_DISTANCE
-            value: "6"
           # yml内のCFG_なんとかを置き換えるためのもの
           - name: ENV_VARIABLE_PREFIX
             value: "CFG_"
