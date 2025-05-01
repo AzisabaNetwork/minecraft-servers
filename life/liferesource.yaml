@@ -29,12 +29,12 @@ spec:
         # 1.17.x ... 16-17 (16はサポート終了)
         # 1.18.x～1.20.4 ... 17
         # 1.20.5以降 ... 21
-        image: itzg/minecraft-server:java11
+        image: itzg/minecraft-server:java21
         workingDir: /data
         imagePullPolicy: Always
         resources:
           requests:
-            memory: "6Gi"
+            memory: "8Gi"
           limits:
             cpu: "6000m"
             memory: "14Gi"
@@ -91,7 +91,7 @@ spec:
             value: 1.15.2
           # 初期・最大メモリ
           - name: MEMORY
-            value: 6G # change to 8G after lifetown closes
+            value: 8G # change to 8G after lifetown closes
           # ホワイトリスト
           - name: ENABLE_WHITELIST
             value: "false"
@@ -100,10 +100,10 @@ spec:
             value: "log4j2Fix.loadReflectionUtil:true"
           # JVMオプション
           - name: JVM_OPTS
-            value: "-javaagent:Log4j2Fix-1.0.4.jar=l -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
+            value: "-javaagent:Log4j2Fix-1.0.4.jar=l -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -DPaper.IgnoreJavaVersion=true"
           # View Distance
           - name: VIEW_DISTANCE
-            value: "8"
+            value: "6"
           # yml内のCFG_なんとかを置き換えるためのもの
           - name: ENV_VARIABLE_PREFIX
             value: "CFG_"
