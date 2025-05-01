@@ -34,7 +34,7 @@ spec:
         imagePullPolicy: Always
         resources:
           requests:
-            memory: "8Gi"
+            memory: "12Gi"
           limits:
             cpu: "6000m"
             memory: "14Gi"
@@ -70,7 +70,7 @@ spec:
             value: "true"
           # 描画距離
           - name: VIEW_DISTANCE
-            value: "10"
+            value: "6"
           # 統計情報をMojangに送信する
           - name: SNOOPER_ENABLED
             value: "false"
@@ -91,7 +91,7 @@ spec:
             value: 1.15.2
           # 初期・最大メモリ
           - name: MEMORY
-            value: 8G # change to 8G after lifetown closes
+            value: 12G # change to 8G after lifetown closes
           # ホワイトリスト
           - name: ENABLE_WHITELIST
             value: "false"
