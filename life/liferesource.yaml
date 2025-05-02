@@ -34,7 +34,7 @@ spec:
         imagePullPolicy: Always
         resources:
           requests:
-            memory: "12Gi"
+            memory: "10Gi"
           limits:
             cpu: "6000m"
             memory: "14Gi"
@@ -91,7 +91,7 @@ spec:
             value: 1.15.2
           # 初期・最大メモリ
           - name: MEMORY
-            value: 12G # change to 8G after lifetown closes
+            value: 10G
           # ホワイトリスト
           - name: ENABLE_WHITELIST
             value: "false"

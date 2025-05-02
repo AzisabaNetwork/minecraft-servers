@@ -29,12 +29,12 @@ spec:
         # 1.17.x ... 16-17 (16はサポート終了)
         # 1.18.x～1.20.4 ... 17
         # 1.20.5以降 ... 21
-        image: itzg/minecraft-server:java11
+        image: itzg/minecraft-server:java21
         workingDir: /data
         imagePullPolicy: Always
         resources:
           requests:
-            memory: "24Gi"
+            memory: "20Gi"
         ports:
           - containerPort: 25565
         env:
@@ -85,7 +85,7 @@ spec:
             value: 1.15.2
           # 初期・最大メモリ
           - name: MEMORY
-            value: 24G
+            value: 20G
           # ホワイトリスト
           - name: ENABLE_WHITELIST
             value: "false"
@@ -94,7 +94,7 @@ spec:
             value: "log4j2Fix.loadReflectionUtil:true"
           # JVMオプション
           - name: JVM_OPTS
-            value: "-XX:+AlwaysPreTouch -javaagent:Log4j2Fix-1.0.4.jar=l -XX:MaxJavaStackTraceDepth=999999"
+            value: "-XX:+AlwaysPreTouch -javaagent:Log4j2Fix-1.0.4.jar=l -XX:MaxJavaStackTraceDepth=999999 -DPaper.IgnoreJavaVersion=true"
           # View Distance
           - name: VIEW_DISTANCE
             value: "8"
