@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: filebrowser-life
+  name: filebrowser-lgw2
   namespace: minecraft
 spec:
   selector:
     matchLabels:
-      app: filebrowser-life
+      app: filebrowser-lgw2
   replicas: 1
   revisionHistoryLimit: 2
   template:
     metadata:
       labels:
-        app: filebrowser-life
+        app: filebrowser-lgw2
     spec:
       containers:
-      - name: filebrowser-life
+      - name: filebrowser-lgw2
         image: filebrowser/filebrowser
         volumeMounts:
         - mountPath: /database
@@ -23,8 +23,6 @@ spec:
         - mountPath: /.filebrowser.json
           name: filebrowser-config
           subPath: ".filebrowser.json"
-        - mountPath: /srv/lifenewpve
-          name: lifenewpve-data
         resources:
           requests:
             cpu: "50m"
@@ -37,19 +35,16 @@ spec:
       volumes:
       - name: filebrowser-database
         persistentVolumeClaim:
-          claimName: filebrowser-life-database
+          claimName: filebrowser-lgw2-database
       - name: filebrowser-config
         configMap:
-          name: filebrowser-life-config
-      - name: lifenewpve-data
-        persistentVolumeClaim:
-          claimName: server-lifenewpve-data-claim
+          name: filebrowser-lgw2-config
       # priorityClassName: minecraft-other-server
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: filebrowser-life-config
+  name: filebrowser-lgw2-config
 data:
   .filebrowser.json: |
     {
@@ -64,7 +59,7 @@ data:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: filebrowser-life-database
+  name: filebrowser-lgw2-database
 spec:
   storageClassName: nfs-client
   accessModes:
@@ -76,11 +71,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: filebrowser-life-svc
+  name: filebrowser-lgw2-svc
 spec:
   type: ClusterIP
   selector:
-    app: filebrowser-life
+    app: filebrowser-lgw2
   ports:
     - port: 80
       targetPort: 80
