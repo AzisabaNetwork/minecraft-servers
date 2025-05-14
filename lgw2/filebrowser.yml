@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: filebrowser-lgw2
+  namespace: minecraft
+spec:
+  selector:
+    matchLabels:
+      app: filebrowser-lgw2
+  replicas: 1
+  revisionHistoryLimit: 2
+  template:
+    metadata:
+      labels:
+        app: filebrowser-lgw2
+    spec:
+      containers:
+      - name: filebrowser-lgw2
+        image: filebrowser/filebrowser
+        volumeMounts:
+        - mountPath: /database
+          name: filebrowser-database
+        - mountPath: /.filebrowser.json
+          name: filebrowser-config
+          subPath: ".filebrowser.json"
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "100Mi"
+          limits:
+            cpu: "100m"
+            memory: "500Mi"
+        ports:
+        - containerPort: 80
+      volumes:
+      - name: filebrowser-database
+        persistentVolumeClaim:
+          claimName: filebrowser-lgw2-database
+      - name: filebrowser-config
+        configMap:
+          name: filebrowser-lgw2-config
+      # priorityClassName: minecraft-other-server
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: filebrowser-lgw2-config
+data:
+  .filebrowser.json: |
+    {
+      "port": 80,
+      "baseURL": "",
+      "address": "",
+      "log": "stdout",
+      "database": "/database/filebrowser.db",
+      "root": "/srv"
+    }
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: filebrowser-lgw2-database
+spec:
+  storageClassName: nfs-client
+  accessModes:
+  - "ReadWriteMany"
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: filebrowser-lgw2-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: filebrowser-lgw2
+  ports:
+    - port: 80
+      targetPort: 80
