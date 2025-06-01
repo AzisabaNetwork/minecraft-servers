@@ -34,8 +34,6 @@ spec:
         imagePullPolicy: Always
         resources:
           requests:
-            memory: "16Gi"
-          limits:
             memory: "20Gi"
         ports:
           - containerPort: 25565
@@ -51,7 +49,7 @@ spec:
             value: PAPER
           # 最適化されたJVMフラグを使用する
           - name: USE_AIKAR_FLAGS
-            value: "false"
+            value: "true"
           # スポーン保護
           - name: SPAWN_PROTECTION
             value: "0"
@@ -87,7 +85,7 @@ spec:
             value: 1.15.2
           # 初期・最大メモリ
           - name: MEMORY
-            value: 16G
+            value: 20G
           # ホワイトリスト
           - name: ENABLE_WHITELIST
             value: "false"
@@ -96,7 +94,8 @@ spec:
             value: "log4j2Fix.loadReflectionUtil:true"
           # JVMオプション
           - name: JVM_OPTS
-            value: "-XX:+UseZGC -XX:+ZGenerational -XX:+AlwaysPreTouch -XX:+UseStringDeduplication -javaagent:Log4j2Fix-1.0.4.jar=l -XX:MaxJavaStackTraceDepth=999999 -DPaper.IgnoreJavaVersion=true"
+            #value: "-XX:+UseZGC -XX:+ZGenerational -XX:+AlwaysPreTouch -XX:+UseStringDeduplication -javaagent:Log4j2Fix-1.0.4.jar=l -XX:MaxJavaStackTraceDepth=999999 -DPaper.IgnoreJavaVersion=true"
+            value: "-javaagent:Log4j2Fix-1.0.4.jar=l -XX:MaxJavaStackTraceDepth=999999 -DPaper.IgnoreJavaVersion=true"
           # View Distance
           - name: VIEW_DISTANCE
             value: "8"
