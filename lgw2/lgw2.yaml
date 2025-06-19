@@ -65,10 +65,12 @@ spec:
             value: 1.16.5
           # 初期・最大メモリ
           - name: MEMORY
-            value: 4G
+            value: 3G
           # JVM -Dオプション
           - name: JVM_DD_OPTS
             value: "Paper.IgnoreJavaVersion:true"
+          - name: JVM_OPTS
+            value: "-XX:+UseStringDeduplication -XX:MaxMetaspaceSize=1024m -XX:ReservedCodeCacheSize=256m"
           # yml内のCFG_なんとかを置き換えるためのもの
           - name: ENV_VARIABLE_PREFIX
             value: "CFG_"

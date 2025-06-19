@@ -35,7 +35,7 @@ spec:
         resources:
           requests:
             cpu: "1000m"
-            memory: "6Gi"
+            memory: "10Gi"
           limits:
             cpu: "10000m"
             memory: "16Gi"
@@ -65,12 +65,12 @@ spec:
             value: 1.16.5
           # 初期・最大メモリ
           - name: MEMORY
-            value: 6G
+            value: 10G
           # JVM -Dオプション
           - name: JVM_DD_OPTS
             value: "Paper.IgnoreJavaVersion:true"
           - name: JVM_OPTS
-            value: "-XX:+AlwaysPreTouch -XX:+UseZGC -XX:AllocatePrefetchStyle=1 -XX:-ZProactive -XX:ConcGCThreads=14 -XX:+UseTransparentHugePages"
+            value: "-XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:+AlwaysPreTouch -XX:+UseLargePages -XX:AllocatePrefetchStyle=1 -XX:ParallelGCThreads=14 -XX:ConcGCThreads=14 -XX:+ShenandoahUncommit -XX:ShenandoahUncommitDelay=10000 -XX:+ShenandoahImplicitGCInvokesConcurrent -XX:+DisableExplicitGC -XX:MaxHeapFreeRatio=20 -XX:MinHeapFreeRatio=10 -XX:+ShenandoahRegionSampling -XX:+ShenandoahElasticTLAB"
           # yml内のCFG_なんとかを置き換えるためのもの
           - name: ENV_VARIABLE_PREFIX
             value: "CFG_"
