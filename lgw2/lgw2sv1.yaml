@@ -70,7 +70,7 @@ spec:
           - name: JVM_DD_OPTS
             value: "Paper.IgnoreJavaVersion:true"
           - name: JVM_OPTS
-            value: "-XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:+AlwaysPreTouch -XX:+UseLargePages -XX:AllocatePrefetchStyle=1 -XX:ParallelGCThreads=14 -XX:ConcGCThreads=14 -XX:+ShenandoahUncommit -XX:ShenandoahUncommitDelay=10000 -XX:+ShenandoahImplicitGCInvokesConcurrent -XX:+DisableExplicitGC -XX:MaxHeapFreeRatio=20 -XX:MinHeapFreeRatio=10 -XX:+ShenandoahRegionSampling -XX:+ShenandoahElasticTLAB"
+            value: "-XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+UseShenandoahGC -XX:+AlwaysPreTouch -XX:+UseLargePages -XX:AllocatePrefetchStyle=1 -XX:ParallelGCThreads=14 -XX:ConcGCThreads=14 -XX:+ShenandoahUncommit -XX:ShenandoahUncommitDelay=10000 -XX:+ShenandoahImplicitGCInvokesConcurrent -XX:+DisableExplicitGC -XX:MaxHeapFreeRatio=20 -XX:MinHeapFreeRatio=10 -XX:+ShenandoahRegionSampling -XX:+ShenandoahElasticTLAB"
           # yml内のCFG_なんとかを置き換えるためのもの
           - name: ENV_VARIABLE_PREFIX
             value: "CFG_"
