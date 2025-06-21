@@ -20,9 +20,9 @@ spec:
         volumeMounts:
         - mountPath: /database
           name: filebrowser-database
-        - mountPath: /.filebrowser.json
+        - mountPath: /config/settings.json
           name: filebrowser-config
-          subPath: ".filebrowser.json"
+          subPath: "settings.json"
         - mountPath: /srv/lifenewpve
           name: lifenewpve-data
         resources:
@@ -33,7 +33,7 @@ spec:
             cpu: "100m"
             memory: "500Mi"
         ports:
-        - containerPort: 80
+        - containerPort: 8080
       volumes:
       - name: filebrowser-database
         persistentVolumeClaim:
@@ -51,9 +51,9 @@ kind: ConfigMap
 metadata:
   name: filebrowser-life-config
 data:
-  .filebrowser.json: |
+  settings.json: |
     {
-      "port": 80,
+      "port": 8080,
       "baseURL": "",
       "address": "",
       "log": "stdout",
@@ -83,4 +83,4 @@ spec:
     app: filebrowser-life
   ports:
     - port: 80
-      targetPort: 80
+      targetPort: 8080
