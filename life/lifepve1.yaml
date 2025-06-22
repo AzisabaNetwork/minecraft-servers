@@ -212,6 +212,8 @@ spec:
           subPath: config.yml
         - name: raid-storage
           mountPath: /mnt/raid/srv/lifepve1
+        - name: raid-storage-pve-plugins
+          mountPath: /mnt/raid/srv/lifepve/plugins
       volumes:
       - name: server-data
         hostPath:
@@ -231,6 +233,10 @@ spec:
       - name: raid-storage
         hostPath:
           path: /mnt/raid/srv/lifepve1
+          type: Directory
+      - name: raid-storage-pve-plugins
+        hostPath:
+          path: /mnt/raid/srv/lifepve/plugins
           type: Directory
       priorityClassName: minecraft-other-server
       terminationGracePeriodSeconds: 60 # 1分
