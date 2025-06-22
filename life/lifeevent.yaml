@@ -138,6 +138,9 @@ spec:
         - name: itemfixer-data
           mountPath: /data/plugins/ItemFixer
           readOnly: true
+        - name: raid-storage
+          mountPath: /data/plugins/TAB
+          subPath: plugins/TAB
         - name: tab-config
           mountPath: /plugins/TAB/config.yml
           subPath: config.yml

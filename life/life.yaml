@@ -135,6 +135,9 @@ spec:
         volumeMounts:
         - name: server-data
           mountPath: /data
+        - name: raid-storage
+          mountPath: /data/plugins/TAB
+          subPath: plugins/TAB
         - name: tab-config
           mountPath: /plugins/TAB/config.yml
           subPath: config.yml
