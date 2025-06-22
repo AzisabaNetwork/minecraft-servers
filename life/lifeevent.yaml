@@ -142,7 +142,7 @@ spec:
           mountPath: /data/plugins/TAB
           subPath: plugins/TAB
         - name: tab-config
-          mountPath: /data/plugins/TAB/config.yml
+          mountPath: /plugins/TAB/config.yml
           subPath: config.yml
         - name: raid-storage
           mountPath: /mnt/raid/srv/lifeevent
@@ -157,7 +157,7 @@ spec:
           type: Directory
       - name: tab-config
         configMap:
-          name: common-life-server-tab-config
+          name: common-life-server-tab-config-with-pvelevel
       - name: raid-storage
         hostPath:
           path: /mnt/raid/srv/lifeevent
