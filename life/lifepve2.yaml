@@ -223,7 +223,7 @@ spec:
         hostPath:
           path: /srv/life/plugins/ItemFixer
           type: Directory
-      - name: pve-data
+      - name: pve2-data
         hostPath:
           path: /srv/lifepve2
           type: Directory
