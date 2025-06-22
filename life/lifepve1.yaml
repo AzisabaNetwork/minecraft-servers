@@ -162,7 +162,7 @@ spec:
         - name: pve1-data
           mountPath: /data/server.properties
           subPath: server.properties
-        - name: pve1-data
+        - name: raid-storage
           mountPath: /data/logs
           subPath: logs
         - name: pve1-data
