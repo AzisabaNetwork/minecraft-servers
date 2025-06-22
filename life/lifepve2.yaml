@@ -141,46 +141,46 @@ spec:
         - name: itemfixer-data
           mountPath: /data/plugins/ItemFixer
           readOnly: true
-        - name: pve-data
+        - name: pve2-data
           mountPath: /data/.rcon-cli.env
           subPath: .rcon-cli.env
-        - name: pve-data
+        - name: pve2-data
           mountPath: /data/.rcon-cli.yaml
           subPath: .rcon-cli.yaml
-        - name: pve-data
+        - name: pve2-data
           mountPath: /data/.paper.env
           subPath: .paper.env
-        - name: pve-data
+        - name: pve2-data
           mountPath: /data/.papermc-manifest.json
           subPath: .papermc-manifest.json
-        - name: pve-data
+        - name: pve2-data
           mountPath: /data/ops.json
           subPath: ops.json
-        - name: pve-data
+        - name: pve2-data
           mountPath: /data/worlds
           subPath: worlds
-        - name: pve-data
+        - name: pve2-data
           mountPath: /data/server.properties
           subPath: server.properties
-        - name: pve-data
+        - name: raid-storage
           mountPath: /data/logs
           subPath: logs
-        - name: pve-data
+        - name: raid-storage
           mountPath: /data/plugins/PlayerIgnore
           subPath: plugins/PlayerIgnore
-        - name: raid-storage
+        - name: pve2-data
           mountPath: /data/plugins/MythicMobs/Error Logs
           subPath: plugins/MythicMobs/Error Logs
-        - name: pve-data
+        - name: raid-storage
           mountPath: /data/plugins/TAB
           subPath: plugins/TAB
-        - name: pve-data
+        - name: raid-storage
           mountPath: /data/plugins/LunaChat
           subPath: plugins/LunaChat
-        - name: pve-data
+        - name: raid-storage
           mountPath: /data/plugins/BuycraftX
           subPath: plugins/BuycraftX
-        - name: pve-data
+        - name: raid-storage
           mountPath: /data/plugins/Shopkeepers
           subPath: plugins/Shopkeepers
         - name: raid-storage
@@ -189,29 +189,31 @@ spec:
         - name: raid-storage
           mountPath: /data/plugins/ScriptBlockPlus/json/playercount
           subPath: plugins/ScriptBlockPlus/json/playercount
-        - name: pve-data
+        - name: raid-storage
           mountPath: /data/plugins/JoinNotifier
           subPath: plugins/JoinNotifier
-        - name: pve-data
+        - name: raid-storage
           mountPath: /data/plugins/LifeCore
           subPath: plugins/LifeCore
-        - name: pve-data
+        - name: raid-storage
           mountPath: /data/plugins/AzisabaAPI
           subPath: plugins/AzisabaAPI
-        - name: pve-data
+        - name: raid-storage
           mountPath: /data/plugins/PlayerLimit
           subPath: plugins/PlayerLimit
-        - name: pve-data
+        - name: raid-storage
           mountPath: /data/plugins/FastAsyncWorldEdit
           subPath: plugins/FastAsyncWorldEdit
-        - name: pve-data
+        - name: raid-storage
           mountPath: /data/plugins/AzisabaAds
           subPath: plugins/AzisabaAds
         - name: tab-config
           mountPath: /plugins/TAB/config.yml
           subPath: config.yml
         - name: raid-storage
-          mountPath: /mnt/raid/srv/lifepve2
+          mountPath: /mnt/raid/srv/lifepve1
+        - name: raid-storage-pve-plugins
+          mountPath: /mnt/raid/srv/lifepve/plugins
       volumes:
       - name: server-data
         hostPath:
@@ -231,6 +233,10 @@ spec:
       - name: raid-storage
         hostPath:
           path: /mnt/raid/srv/lifepve2
+          type: Directory
+      - name: raid-storage-pve-plugins
+        hostPath:
+          path: /mnt/raid/srv/lifepve/plugins
           type: Directory
       priorityClassName: minecraft-other-server
       terminationGracePeriodSeconds: 60 # 1分
