@@ -142,7 +142,7 @@ spec:
           mountPath: /data/plugins/TAB
           subPath: plugins/TAB
         - name: tab-config
-          mountPath: /plugins/TAB/config.yml
+          mountPath: /data/plugins/TAB/config.yml
           subPath: config.yml
         - name: raid-storage
           mountPath: /mnt/raid/srv/lifeevent
