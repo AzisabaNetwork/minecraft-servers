@@ -165,22 +165,22 @@ spec:
         - name: raid-storage
           mountPath: /data/logs
           subPath: logs
-        - name: pve1-data
+        - name: raid-storage
           mountPath: /data/plugins/PlayerIgnore
           subPath: plugins/PlayerIgnore
-        - name: raid-storage
+        - name: pve1-data
           mountPath: /data/plugins/MythicMobs/Error Logs
           subPath: plugins/MythicMobs/Error Logs
-        - name: pve1-data
+        - name: raid-storage
           mountPath: /data/plugins/TAB
           subPath: plugins/TAB
-        - name: pve1-data
+        - name: raid-storage
           mountPath: /data/plugins/LunaChat
           subPath: plugins/LunaChat
-        - name: pve1-data
+        - name: raid-storage
           mountPath: /data/plugins/BuycraftX
           subPath: plugins/BuycraftX
-        - name: pve1-data
+        - name: raid-storage
           mountPath: /data/plugins/Shopkeepers
           subPath: plugins/Shopkeepers
         - name: raid-storage
@@ -189,22 +189,22 @@ spec:
         - name: raid-storage
           mountPath: /data/plugins/ScriptBlockPlus/json/playercount
           subPath: plugins/ScriptBlockPlus/json/playercount
-        - name: pve1-data
+        - name: raid-storage
           mountPath: /data/plugins/JoinNotifier
           subPath: plugins/JoinNotifier
-        - name: pve1-data
+        - name: raid-storage
           mountPath: /data/plugins/LifeCore
           subPath: plugins/LifeCore
-        - name: pve1-data
+        - name: raid-storage
           mountPath: /data/plugins/AzisabaAPI
           subPath: plugins/AzisabaAPI
-        - name: pve1-data
+        - name: raid-storage
           mountPath: /data/plugins/PlayerLimit
           subPath: plugins/PlayerLimit
-        - name: pve1-data
+        - name: raid-storage
           mountPath: /data/plugins/FastAsyncWorldEdit
           subPath: plugins/FastAsyncWorldEdit
-        - name: pve1-data
+        - name: raid-storage
           mountPath: /data/plugins/AzisabaAds
           subPath: plugins/AzisabaAds
         - name: tab-config
@@ -219,7 +219,7 @@ spec:
           type: Directory
       - name: itemfixer-data
         hostPath:
-          path: /srv/life/plugins/ItemFixer
+          path: /mnt/raid/srv/life/plugins/ItemFixer
           type: Directory
       - name: pve1-data
         hostPath:
