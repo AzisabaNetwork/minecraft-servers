@@ -17,7 +17,7 @@ spec:
         kuvel.azisaba.net/enable-server-discovery: "true"
         kuvel.azisaba.net/preferred-server-name: lifepve
     spec:
-      nodeName: saba9
+      nodeName: saba12
       containers:
       - name: server-lifepve
         # Dockerイメージの指定
@@ -150,6 +150,8 @@ spec:
           mountPath: /srv/lifeevent
         - name: schem-lifeafk
           mountPath: /srv/lifeafk
+        - name: raid-storage
+          mountPath: /mnt/raid
       volumes:
       - name: server-data
         hostPath:
@@ -182,6 +184,10 @@ spec:
       - name: tab-config
         configMap:
           name: common-life-server-tab-config-with-pvelevel
+      - name: raid-storage
+        hostPath:
+          path: /mnt/raid
+          type: Directory
       priorityClassName: minecraft-other-server
       terminationGracePeriodSeconds: 60 # 1分
 ---

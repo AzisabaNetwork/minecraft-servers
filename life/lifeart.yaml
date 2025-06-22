@@ -17,7 +17,15 @@ spec:
         kuvel.azisaba.net/enable-server-discovery: "true"
         kuvel.azisaba.net/preferred-server-name: lifeart
     spec:
-      nodeName: saba10 # it does not need to be on saba10, we just need to avoid saba9
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: NotIn
+                values:
+                - saba12
       containers:
         - name: server-lifeart
           # Dockerイメージの指定

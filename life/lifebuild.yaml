@@ -17,7 +17,7 @@ spec:
         kuvel.azisaba.net/enable-server-discovery: "true"
         kuvel.azisaba.net/preferred-server-name: lifebuild
     spec:
-      nodeName: saba9
+      nodeName: saba12
       containers:
       - name: server-lifebuild
         # Dockerイメージの指定
@@ -135,6 +135,8 @@ spec:
         - name: tab-config
           mountPath: /plugins/TAB/config.yml
           subPath: config.yml
+        - name: raid-storage
+          mountPath: /mnt/raid
       volumes:
       - name: server-data
         hostPath:
@@ -143,6 +145,10 @@ spec:
       - name: tab-config
         configMap:
           name: common-life-server-tab-config
+      - name: raid-storage
+        hostPath:
+          path: /mnt/raid
+          type: Directory
       priorityClassName: minecraft-other-server
       terminationGracePeriodSeconds: 60 # 1分
 ---
