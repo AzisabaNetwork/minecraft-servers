@@ -168,7 +168,7 @@ spec:
         - name: pve-data
           mountPath: /data/plugins/PlayerIgnore
           subPath: plugins/PlayerIgnore
-        - name: pve-data
+        - name: raid-storage
           mountPath: /data/plugins/MythicMobs/Error Logs
           subPath: plugins/MythicMobs/Error Logs
         - name: pve-data
@@ -183,10 +183,10 @@ spec:
         - name: pve-data
           mountPath: /data/plugins/Shopkeepers
           subPath: plugins/Shopkeepers
-        - name: pve-data
+        - name: raid-storage
           mountPath: /data/plugins/Essentials/userdata
           subPath: plugins/Essentials/userdata
-        - name: pve-data
+        - name: raid-storage
           mountPath: /data/plugins/ScriptBlockPlus/json/playercount
           subPath: plugins/ScriptBlockPlus/json/playercount
         - name: pve-data
@@ -211,7 +211,7 @@ spec:
           mountPath: /plugins/TAB/config.yml
           subPath: config.yml
         - name: raid-storage
-          mountPath: /mnt/raid
+          mountPath: /mnt/raid/srv/lifepve2
       volumes:
       - name: server-data
         hostPath:
@@ -230,7 +230,7 @@ spec:
           name: common-life-server-tab-config-with-pvelevel
       - name: raid-storage
         hostPath:
-          path: /mnt/raid
+          path: /mnt/raid/srv/lifepve2
           type: Directory
       priorityClassName: minecraft-other-server
       terminationGracePeriodSeconds: 60 # 1分

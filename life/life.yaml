@@ -139,7 +139,7 @@ spec:
           mountPath: /plugins/TAB/config.yml
           subPath: config.yml
         - name: raid-storage
-          mountPath: /mnt/raid
+          mountPath: /mnt/raid/srv/life
       volumes:
       - name: server-data
         hostPath:
@@ -150,7 +150,7 @@ spec:
           name: common-life-server-tab-config-with-pvelevel
       - name: raid-storage
         hostPath:
-          path: /mnt/raid
+          path: /mnt/raid/srv/life
           type: Directory
       priorityClassName: minecraft-other-server
       terminationGracePeriodSeconds: 60 # 1分

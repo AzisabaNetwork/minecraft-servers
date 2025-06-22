@@ -112,18 +112,6 @@ spec:
         - name: tab-config
           mountPath: /plugins/TAB/config.yml
           subPath: config.yml
-        - name: schem-life
-          mountPath: /srv/life
-        - name: schem-lifepve
-          mountPath: /srv/lifepve
-        - name: schem-liferesource
-          mountPath: /srv/liferesource
-        - name: schem-lifeevent
-          mountPath: /srv/lifeevent
-        - name: schem-lifeafk
-          mountPath: /srv/lifeafk
-        - name: schem-lifetown
-          mountPath: /srv/lifetown
         - name: raid-storage
           mountPath: /mnt/raid
       volumes:
@@ -134,33 +122,9 @@ spec:
       - name: tab-config
         configMap:
           name: common-life-server-tab-config
-      - name: schem-life
-        hostPath:
-          path: /srv/life/plugins/WorldEdit/schematics
-          type: Directory
-      - name: schem-lifepve
-        hostPath:
-          path: /srv/lifepve/plugins/WorldEdit/schematics
-          type: Directory
-      - name: schem-liferesource
-        hostPath:
-          path: /srv/liferesource/plugins/WorldEdit/schematics
-          type: Directory
-      - name: schem-lifeevent
-        hostPath:
-          path: /srv/lifeevent/plugins/WorldEdit/schematics
-          type: Directory
-      - name: schem-lifeafk
-        hostPath:
-          path: /srv/lifeafk/plugins/WorldEdit/schematics
-          type: Directory
-      - name: schem-lifetown
-        hostPath:
-          path: /srv/lifetown/plugins/FastAsyncWorldEdit/schematics
-          type: Directory
       - name: raid-storage
         hostPath:
-          path: /mnt/raid
+          path: /mnt/raid/srv/lifetown
           type: Directory
       priorityClassName: minecraft-other-server
       terminationGracePeriodSeconds: 60 # 1分

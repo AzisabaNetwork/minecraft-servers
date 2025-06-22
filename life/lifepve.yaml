@@ -151,7 +151,7 @@ spec:
         - name: schem-lifeafk
           mountPath: /srv/lifeafk
         - name: raid-storage
-          mountPath: /mnt/raid
+          mountPath: /mnt/raid/srv/lifepve
       volumes:
       - name: server-data
         hostPath:
@@ -186,7 +186,7 @@ spec:
           name: common-life-server-tab-config-with-pvelevel
       - name: raid-storage
         hostPath:
-          path: /mnt/raid
+          path: /mnt/raid/srv/lifepve
           type: Directory
       priorityClassName: minecraft-other-server
       terminationGracePeriodSeconds: 60 # 1分
