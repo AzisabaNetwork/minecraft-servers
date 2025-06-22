@@ -183,9 +183,17 @@ spec:
         - name: raid-storage
           mountPath: /data/plugins/Shopkeepers
           subPath: plugins/Shopkeepers
+        - name: server-data
+          mountPath: /data/plugins/Essentials
+          subPath: plugins/Essentials
+          readOnly: true
         - name: raid-storage
           mountPath: /data/plugins/Essentials/userdata
           subPath: plugins/Essentials/userdata
+        - name: server-data
+          mountPath: /data/plugins/ScriptBlockPlus
+          subPath: plugins/ScriptBlockPlus
+          readOnly: true
         - name: raid-storage
           mountPath: /data/plugins/ScriptBlockPlus/json/playercount
           subPath: plugins/ScriptBlockPlus/json/playercount

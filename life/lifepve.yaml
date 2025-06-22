@@ -137,6 +137,45 @@ spec:
         - name: itemfixer-data
           mountPath: /data/plugins/ItemFixer
           readOnly: true
+        - name: server-data
+          mountPath: /data/plugins/TAB
+          subPath: plugins/TAB
+        - name: server-data
+          mountPath: /data/plugins/PlayerIgnore
+          subPath: plugins/PlayerIgnore
+        - name: server-data
+          mountPath: /data/plugins/LunaChat
+          subPath: plugins/LunaChat
+        - name: server-data
+          mountPath: /data/plugins/BuycraftX
+          subPath: plugins/BuycraftX
+        - name: server-data
+          mountPath: /data/plugins/Shopkeepers
+          subPath: plugins/Shopkeepers
+        - name: server-data
+          mountPath: /data/plugins/Essentials
+          subPath: plugins/Essentials
+        - name: server-data
+          mountPath: /data/plugins/ScriptBlockPlus
+          subPath: plugins/ScriptBlockPlus
+        - name: server-data
+          mountPath: /data/plugins/JoinNotifier
+          subPath: plugins/JoinNotifier
+        - name: server-data
+          mountPath: /data/plugins/LifeCore
+          subPath: plugins/LifeCore
+        - name: server-data
+          mountPath: /data/plugins/AzisabaAPI
+          subPath: plugins/AzisabaAPI
+        - name: server-data
+          mountPath: /data/plugins/PlayerLimit
+          subPath: plugins/PlayerLimit
+        - name: server-data
+          mountPath: /data/plugins/FastAsyncWorldEdit
+          subPath: plugins/FastAsyncWorldEdit
+        - name: server-data
+          mountPath: /data/plugins/AzisabaAds
+          subPath: plugins/AzisabaAds
         - name: tab-config
           mountPath: /plugins/TAB/config.yml
           subPath: config.yml
