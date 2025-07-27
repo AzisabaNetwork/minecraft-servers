@@ -135,6 +135,9 @@ spec:
         - name: server-data
           mountPath: /data
           readOnly: true
+        - name: raid-storage-pve-plugins
+          mountPath: /mnt/raid/srv/lifepve/plugins
+          readOnly: true
         - name: server-data
           mountPath: /data/plugins/MythicMobs
           subPath: plugins/MythicMobs
@@ -220,8 +223,6 @@ spec:
           subPath: config.yml
         - name: raid-storage
           mountPath: /mnt/raid/srv/lifepve1
-        - name: raid-storage-pve-plugins
-          mountPath: /mnt/raid/srv/lifepve/plugins
       volumes:
       - name: server-data
         hostPath:
