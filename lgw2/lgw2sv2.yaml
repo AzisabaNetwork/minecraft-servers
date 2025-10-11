@@ -117,10 +117,6 @@ spec:
           subPath: plugins/LeonCSAddon
           readOnly: true
         - name: lgw2-data
-          mountPath: /data/plugins/LeonGunWar
-          subPath: plugins/LeonGunWar
-          readOnly: true
-        - name: lgw2-data
           mountPath: /data/plugins/CrackShot
           subPath: plugins/CrackShot
           readOnly: true
