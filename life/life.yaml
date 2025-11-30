@@ -90,12 +90,12 @@ spec:
           - name: ENABLE_WHITELIST
             value: "false"
           # JVM -Dオプション
-          - name: JVM_DD_OPTS
-            value: "log4j2Fix.loadReflectionUtil:true"
+          #- name: JVM_DD_OPTS
+          #  value: "log4j2Fix.loadReflectionUtil:true"
           # JVMオプション
           - name: JVM_OPTS
             #value: "-XX:+UseZGC -XX:+ZGenerational -XX:+AlwaysPreTouch -XX:+UseStringDeduplication -javaagent:Log4j2Fix-1.0.4.jar=l -XX:MaxJavaStackTraceDepth=999999 -DPaper.IgnoreJavaVersion=true"
-            value: "-javaagent:Log4j2Fix-1.0.4.jar=l -XX:MaxJavaStackTraceDepth=999999 -DPaper.IgnoreJavaVersion=true"
+            value: "-XX:MaxJavaStackTraceDepth=999999 -DPaper.IgnoreJavaVersion=true"
           # View Distance
           - name: VIEW_DISTANCE
             value: "8"
