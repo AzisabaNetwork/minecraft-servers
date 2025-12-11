@@ -96,7 +96,7 @@ spec:
             value: "false"
           # Add debugger
           - name: JVM_OPTS
-            value: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -DPaper.IgnoreJavaVersion=true"
+            value: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -DPaper.IgnoreJavaVersion=true -XX:+UseCompactObjectHeaders"
           # yml内のCFG_なんとかを置き換えるためのもの
           - name: ENV_VARIABLE_PREFIX
             value: "CFG_"
