@@ -100,7 +100,7 @@ spec:
           #  value: "log4j2Fix.loadReflectionUtil:true"
           # JVMオプション
           - name: JVM_OPTS
-            value: "-DPaper.ignoreWorldDataVersion=true -DPaper.IgnoreJavaVersion=true -XX:+UseCompactObjectHeaders"
+            value: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -DPaper.IgnoreJavaVersion=true -XX:+UseCompactObjectHeaders"
           # yml内のCFG_なんとかを置き換えるためのもの
           - name: ENV_VARIABLE_PREFIX
             value: "CFG_"
