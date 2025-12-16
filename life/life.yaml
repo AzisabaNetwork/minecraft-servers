@@ -29,7 +29,7 @@ spec:
         # 1.17.x ... 16-17 (16はサポート終了)
         # 1.18.x～1.20.4 ... 17
         # 1.20.5以降 ... 21
-        image: itzg/minecraft-server:java21
+        image: itzg/minecraft-server:java25
         workingDir: /data
         imagePullPolicy: Always
         resources:
@@ -95,7 +95,7 @@ spec:
           # JVMオプション
           - name: JVM_OPTS
             #value: "-XX:+UseZGC -XX:+ZGenerational -XX:+AlwaysPreTouch -XX:+UseStringDeduplication -javaagent:Log4j2Fix-1.0.4.jar=l -XX:MaxJavaStackTraceDepth=999999 -DPaper.IgnoreJavaVersion=true"
-            value: "-XX:MaxJavaStackTraceDepth=999999 -DPaper.IgnoreJavaVersion=true"
+            value: "-XX:MaxJavaStackTraceDepth=999999 -DPaper.IgnoreJavaVersion=true -XX:+UseCompactObjectHeaders"
           # View Distance
           - name: VIEW_DISTANCE
             value: "8"
