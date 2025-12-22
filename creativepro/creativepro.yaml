@@ -1,0 +1,144 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: server-creativepro
+spec:
+  serviceName: server-creativepro
+  selector:
+    matchLabels:
+      app: server-creativepro
+  strategy:
+    type: Recreate
+  replicas: 1
+  revisionHistoryLimit: 2
+  template:
+    metadata:
+      labels:
+        app: server-creativepro
+        stage: production
+        kuvel.azisaba.net/enable-server-discovery: "true"
+        kuvel.azisaba.net/preferred-server-name: creativepro
+    spec:
+      containers:
+        - name: server-creativepro
+          # Dockerイメージの指定
+          # Javaバージョン早見表
+          # 1.14.4以下 ... 8
+          # 1.15.x ... 8-11 (9-10はサポート終了)
+          # 1.16.x ... 11-16 (12-16はサポート終了)
+          # 1.17.x ... 16-17 (16はサポート終了)
+          # 1.18.x～1.20.4 ... 17 (一部は21まで可能)
+          # 1.20.5以降 ... 21
+          image: itzg/minecraft-server:java21
+          workingDir: /data
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "4Gi"
+            limits:
+              cpu: "10000m"
+              memory: "16Gi" # limitを超えるとpodが即座にOOMKilledされてしまうため(MAX_)MEMORY + 8Gぐらいにして余裕を持たせる
+          ports:
+            - containerPort: 25565
+          env:
+            # タイムゾーン
+            - name: TZ
+              value: "Asia/Tokyo"
+            # EULAに同意する
+            - name: EULA
+              value: "true"
+            # サーバーの種類
+            - name: TYPE
+              value: PAPER
+            # 最適化されたJVMフラグを使用する
+            - name: USE_AIKAR_FLAGS
+              value: "true"
+            # Minecraftバージョン
+            - name: VERSION
+              value: 1.21.11
+            # 初期・最大メモリ
+            - name: MEMORY
+              value: 8G
+            # JVM -Dオプション
+            - name: JVM_DD_OPTS
+              value: "Paper.IgnoreJavaVersion:true"
+            # yml内のCFG_なんとかを置き換えるためのもの
+            - name: ENV_VARIABLE_PREFIX
+              value: "CFG_"
+            # メタデータ(サーバー内で環境変数で取得可能)
+            - name: CFG_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: CFG_POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: CFG_SERVER_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['kuvel.azisaba.net/preferred-server-name']
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: SERVER_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['kuvel.azisaba.net/preferred-server-name']
+          startupProbe:
+            tcpSocket:
+              port: 25565
+            failureThreshold: 60 # 600秒
+            periodSeconds: 10
+          volumeMounts:
+            - name: server-creativepro-data-claim
+              mountPath: /data
+            - name: server-creativepro-plugins-data-claim
+              mountPath: /plugins
+            - name: tab-config
+              mountPath: /plugins/TAB/config.yml
+              subPath: config.yml
+      volumes:
+        - name: tab-config
+          configMap:
+            name: common-life-server-tab-config
+      priorityClassName: minecraft-other-server
+      terminationGracePeriodSeconds: 60 # 1分
+  volumeClaimTemplates:
+    - metadata:
+        name: server-creativepro-data-claim
+      spec:
+        accessModes: [ "ReadWriteMany" ]
+        resources:
+          requests:
+            storage: 50Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: server-creativepro-plugins-data-claim
+spec:
+  storageClassName: nfs-client
+  accessModes:
+  - "ReadWriteMany"
+  resources:
+    requests:
+      storage: 15Gi
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: server-creativepro-svc
+# spec:
+#   type: ClusterIP
+#   selector:
+#     app: server-creativepro
+#     stage: production
+#   ports:
+#     - port: 25565
+#       targetPort: 25565
