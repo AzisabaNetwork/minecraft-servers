@@ -113,6 +113,7 @@ spec:
     - metadata:
         name: server-creativepro-data-claim
       spec:
+        storageClassName: nfs-client
         accessModes: [ "ReadWriteMany" ]
         resources:
           requests:
