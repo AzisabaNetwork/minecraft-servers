@@ -107,6 +107,9 @@ spec:
         - name: tab-config
           configMap:
             name: common-life-server-tab-config
+        - name: server-creativepro-plugins-data-claim
+          persistentVolumeClaim:
+            claimName: server-creativepro-plugins-data-claim
       priorityClassName: minecraft-other-server
       terminationGracePeriodSeconds: 60 # 1分
   volumeClaimTemplates:
