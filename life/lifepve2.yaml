@@ -1,255 +1,246 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Pod
 metadata:
   name: server-lifepve2
+  labels:
+    app: server-lifepve2
+    stage: production
+    kuvel.azisaba.net/enable-server-discovery: "true"
+    kuvel.azisaba.net/preferred-server-name: lifepve2
+    kuvel.azisaba.net/disable-name-suffix: "true"
 spec:
-  selector:
-    matchLabels:
-      app: server-lifepve2
-  strategy:
-    type: Recreate
-  revisionHistoryLimit: 2
-  template:
-    metadata:
-      labels:
-        app: server-lifepve2
-        stage: production
-        kuvel.azisaba.net/enable-server-discovery: "true"
-        # kuvel.azisaba.net/preferred-server-name: lifepve2
-        kuvel.azisaba.net/disable-name-suffix: "true"
-    spec:
-      nodeName: saba12
-      containers:
-      - name: server-lifepve2
-        # Dockerイメージの指定
-        # java11の11の部分を8にしたり17にしたりなど、Minecraftバージョンによって適宜変えてください
-        # Javaバージョン早見表
-        # 1.14.4以下 ... 8
-        # 1.15.x ... 8-11 (9-10はサポート終了)
-        # 1.16.x ... 11-16 (12-16はサポート終了)
-        # 1.17.x ... 16-17 (16はサポート終了)
-        # 1.18.x～1.20.4 ... 17
-        # 1.20.5以降 ... 21
-        image: itzg/minecraft-server:java25
-        workingDir: /data
-        imagePullPolicy: Always
-        resources:
-          requests:
-            memory: "8Gi"
-        ports:
-          - containerPort: 25565
-        env:
-          # タイムゾーン
-          - name: TZ
-            value: "Asia/Tokyo"
-          # EULAに同意する
-          - name: EULA
-            value: "true"
-          # サーバーの種類
-          - name: TYPE
-            value: PAPER
-          # 最適化されたJVMフラグを使用する
-          - name: USE_AIKAR_FLAGS
-            value: "true"
-          # スポーン保護
-          - name: SPAWN_PROTECTION
-            value: "0"
-          # オンラインモード
-          - name: ONLINE_MODE
-            value: "false"
-          # コマンドブロックを有効にする
-          - name: ENABLE_COMMAND_BLOCK
-            value: "true"
-          # ネザーを有効にする
-          - name: ALLOW_NETHER
-            value: "false"
-          # "Flying is not enabled on this server"を無効にする
-          - name: ALLOW_FLIGHT
-            value: "true"
-          # 描画距離
-          - name: VIEW_DISTANCE
-            value: "10"
-          # 統計情報をMojangに送信する
-          - name: SNOOPER_ENABLED
-            value: "false"
-          # プレイヤーの実績・進捗解除を全体チャットに流す
-          - name: ANNOUNCE_PLAYER_ACHIEVEMENTS
-            value: "false"
-          # 最大人数
-          - name: MAX_PLAYERS
-            value: "1000"
-          # UID
-          - name: UID
-            value: "0"
-          # GID
-          - name: GID
-            value: "1012"
-          # Minecraftバージョン
-          - name: VERSION
-            value: 1.15.2
-          # 初期・最大メモリ
-          - name: MEMORY
-            value: 8G # change to 10G after lifetown closes
-          # ホワイトリスト
-          - name: ENABLE_WHITELIST
-            value: "false"
-          # JVM -Dオプション
-          #- name: JVM_DD_OPTS
-          #  value: "log4j2Fix.loadReflectionUtil:true"
-          # JVMオプション
-          - name: JVM_OPTS
-            value: "-DPaper.ignoreWorldDataVersion=true -DPaper.IgnoreJavaVersion=true -XX:+UseCompactObjectHeaders"
-          # yml内のCFG_なんとかを置き換えるためのもの
-          - name: ENV_VARIABLE_PREFIX
-            value: "CFG_"
-          # メタデータ(サーバー内で環境変数で取得可能)
-          - name: CFG_POD_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.name
-          - name: CFG_POD_NAMESPACE
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.namespace
-          - name: CFG_SERVER_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.labels['kuvel.azisaba.net/preferred-server-name']
-          - name: POD_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.name
-          - name: POD_NAMESPACE
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.namespace
-          - name: SERVER_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.labels['kuvel.azisaba.net/preferred-server-name']
-        startupProbe:
-          tcpSocket:
-            port: 25565
-          failureThreshold: 60 # 600秒
-          periodSeconds: 10
-        volumeMounts:
-        - name: server-data
-          mountPath: /data
-          readOnly: true
-        - name: raid-storage-pve-plugins
-          mountPath: /mnt/raid/srv/lifepve/plugins
-          readOnly: true
-        - name: server-data
-          mountPath: /data/plugins/MythicMobs
-          subPath: plugins/MythicMobs
-        - name: itemfixer-data
-          mountPath: /data/plugins/ItemFixer
-          readOnly: true
-        - name: pve2-data
-          mountPath: /data/.rcon-cli.env
-          subPath: .rcon-cli.env
-        - name: pve2-data
-          mountPath: /data/.rcon-cli.yaml
-          subPath: .rcon-cli.yaml
-        - name: pve2-data
-          mountPath: /data/.paper.env
-          subPath: .paper.env
-        - name: pve2-data
-          mountPath: /data/.papermc-manifest.json
-          subPath: .papermc-manifest.json
-        - name: pve2-data
-          mountPath: /data/ops.json
-          subPath: ops.json
-        - name: pve2-data
-          mountPath: /data/worlds
-          subPath: worlds
-        - name: pve2-data
-          mountPath: /data/server.properties
-          subPath: server.properties
-        - name: raid-storage
-          mountPath: /data/logs
-          subPath: logs
-        - name: raid-storage
-          mountPath: /data/plugins/PlayerIgnore
-          subPath: plugins/PlayerIgnore
-        - name: pve2-data
-          mountPath: /data/plugins/MythicMobs/Error Logs
-          subPath: plugins/MythicMobs/Error Logs
-        - name: raid-storage
-          mountPath: /data/plugins/TAB
-          subPath: plugins/TAB
-        - name: raid-storage
-          mountPath: /data/plugins/LunaChat
-          subPath: plugins/LunaChat
-        - name: raid-storage
-          mountPath: /data/plugins/BuycraftX
-          subPath: plugins/BuycraftX
-        - name: raid-storage
-          mountPath: /data/plugins/Shopkeepers
-          subPath: plugins/Shopkeepers
-        - name: server-data
-          mountPath: /data/plugins/Essentials
-          subPath: plugins/Essentials
-          readOnly: true
-        - name: raid-storage
-          mountPath: /data/plugins/Essentials/userdata
-          subPath: plugins/Essentials/userdata
-        - name: server-data
-          mountPath: /data/plugins/ScriptBlockPlus
-          subPath: plugins/ScriptBlockPlus
-          readOnly: true
-        - name: raid-storage
-          mountPath: /data/plugins/ScriptBlockPlus/json/playercount
-          subPath: plugins/ScriptBlockPlus/json/playercount
-        - name: raid-storage
-          mountPath: /data/plugins/JoinNotifier
-          subPath: plugins/JoinNotifier
-        - name: raid-storage
-          mountPath: /data/plugins/LifeCore
-          subPath: plugins/LifeCore
-        - name: raid-storage
-          mountPath: /data/plugins/AzisabaAPI
-          subPath: plugins/AzisabaAPI
-        - name: raid-storage
-          mountPath: /data/plugins/PlayerLimit
-          subPath: plugins/PlayerLimit
-        - name: raid-storage
-          mountPath: /data/plugins/FastAsyncWorldEdit
-          subPath: plugins/FastAsyncWorldEdit
-        - name: raid-storage
-          mountPath: /data/plugins/AzisabaAds
-          subPath: plugins/AzisabaAds
-        - name: tab-config
-          mountPath: /plugins/TAB/config.yml
-          subPath: config.yml
-        - name: raid-storage
-          mountPath: /mnt/raid/srv/lifepve1
-      volumes:
-      - name: server-data
-        hostPath:
-          path: /srv/lifepve
-          type: Directory
-      - name: itemfixer-data
-        hostPath:
-          path: /srv/life/plugins/ItemFixer
-          type: Directory
-      - name: pve2-data
-        hostPath:
-          path: /srv/lifepve2
-          type: Directory
-      - name: tab-config
-        configMap:
-          name: common-life-server-tab-config-with-pvelevel
-      - name: raid-storage
-        hostPath:
-          path: /mnt/raid/srv/lifepve2
-          type: Directory
-      - name: raid-storage-pve-plugins
-        hostPath:
-          path: /mnt/raid/srv/lifepve/plugins
-          type: Directory
-      priorityClassName: minecraft-other-server
-      terminationGracePeriodSeconds: 60 # 1分
+  nodeName: saba12
+  containers:
+  - name: server-lifepve2
+    # Dockerイメージの指定
+    # java11の11の部分を8にしたり17にしたりなど、Minecraftバージョンによって適宜変えてください
+    # Javaバージョン早見表
+    # 1.14.4以下 ... 8
+    # 1.15.x ... 8-11 (9-10はサポート終了)
+    # 1.16.x ... 11-16 (12-16はサポート終了)
+    # 1.17.x ... 16-17 (16はサポート終了)
+    # 1.18.x～1.20.4 ... 17
+    # 1.20.5以降 ... 21
+    image: itzg/minecraft-server:java25
+    workingDir: /data
+    imagePullPolicy: Always
+    resources:
+      requests:
+        memory: "8Gi"
+    ports:
+      - containerPort: 25565
+    env:
+      # タイムゾーン
+      - name: TZ
+        value: "Asia/Tokyo"
+      # EULAに同意する
+      - name: EULA
+        value: "true"
+      # サーバーの種類
+      - name: TYPE
+        value: PAPER
+      # 最適化されたJVMフラグを使用する
+      - name: USE_AIKAR_FLAGS
+        value: "true"
+      # スポーン保護
+      - name: SPAWN_PROTECTION
+        value: "0"
+      # オンラインモード
+      - name: ONLINE_MODE
+        value: "false"
+      # コマンドブロックを有効にする
+      - name: ENABLE_COMMAND_BLOCK
+        value: "true"
+      # ネザーを有効にする
+      - name: ALLOW_NETHER
+        value: "false"
+      # "Flying is not enabled on this server"を無効にする
+      - name: ALLOW_FLIGHT
+        value: "true"
+      # 描画距離
+      - name: VIEW_DISTANCE
+        value: "10"
+      # 統計情報をMojangに送信する
+      - name: SNOOPER_ENABLED
+        value: "false"
+      # プレイヤーの実績・進捗解除を全体チャットに流す
+      - name: ANNOUNCE_PLAYER_ACHIEVEMENTS
+        value: "false"
+      # 最大人数
+      - name: MAX_PLAYERS
+        value: "1000"
+      # UID
+      - name: UID
+        value: "0"
+      # GID
+      - name: GID
+        value: "1012"
+      # Minecraftバージョン
+      - name: VERSION
+        value: 1.15.2
+      # 初期・最大メモリ
+      - name: MEMORY
+        value: 8G # change to 10G after lifetown closes
+      # ホワイトリスト
+      - name: ENABLE_WHITELIST
+        value: "false"
+      # JVM -Dオプション
+      #- name: JVM_DD_OPTS
+      #  value: "log4j2Fix.loadReflectionUtil:true"
+      # JVMオプション
+      - name: JVM_OPTS
+        value: "-DPaper.ignoreWorldDataVersion=true -DPaper.IgnoreJavaVersion=true -XX:+UseCompactObjectHeaders"
+      # yml内のCFG_なんとかを置き換えるためのもの
+      - name: ENV_VARIABLE_PREFIX
+        value: "CFG_"
+      # メタデータ(サーバー内で環境変数で取得可能)
+      - name: CFG_POD_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.name
+      - name: CFG_POD_NAMESPACE
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.namespace
+      - name: CFG_SERVER_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.labels['kuvel.azisaba.net/preferred-server-name']
+      - name: POD_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.name
+      - name: POD_NAMESPACE
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.namespace
+      - name: SERVER_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.labels['kuvel.azisaba.net/preferred-server-name']
+    startupProbe:
+      tcpSocket:
+        port: 25565
+      failureThreshold: 60 # 600秒
+      periodSeconds: 10
+    volumeMounts:
+    - name: server-data
+      mountPath: /data
+      readOnly: true
+    - name: raid-storage-pve-plugins
+      mountPath: /mnt/raid/srv/lifepve/plugins
+      readOnly: true
+    - name: server-data
+      mountPath: /data/plugins/MythicMobs
+      subPath: plugins/MythicMobs
+    - name: itemfixer-data
+      mountPath: /data/plugins/ItemFixer
+      readOnly: true
+    - name: pve2-data
+      mountPath: /data/.rcon-cli.env
+      subPath: .rcon-cli.env
+    - name: pve2-data
+      mountPath: /data/.rcon-cli.yaml
+      subPath: .rcon-cli.yaml
+    - name: pve2-data
+      mountPath: /data/.paper.env
+      subPath: .paper.env
+    - name: pve2-data
+      mountPath: /data/.papermc-manifest.json
+      subPath: .papermc-manifest.json
+    - name: pve2-data
+      mountPath: /data/ops.json
+      subPath: ops.json
+    - name: pve2-data
+      mountPath: /data/worlds
+      subPath: worlds
+    - name: pve2-data
+      mountPath: /data/server.properties
+      subPath: server.properties
+    - name: raid-storage
+      mountPath: /data/logs
+      subPath: logs
+    - name: raid-storage
+      mountPath: /data/plugins/PlayerIgnore
+      subPath: plugins/PlayerIgnore
+    - name: pve2-data
+      mountPath: /data/plugins/MythicMobs/Error Logs
+      subPath: plugins/MythicMobs/Error Logs
+    - name: raid-storage
+      mountPath: /data/plugins/TAB
+      subPath: plugins/TAB
+    - name: raid-storage
+      mountPath: /data/plugins/LunaChat
+      subPath: plugins/LunaChat
+    - name: raid-storage
+      mountPath: /data/plugins/BuycraftX
+      subPath: plugins/BuycraftX
+    - name: raid-storage
+      mountPath: /data/plugins/Shopkeepers
+      subPath: plugins/Shopkeepers
+    - name: server-data
+      mountPath: /data/plugins/Essentials
+      subPath: plugins/Essentials
+      readOnly: true
+    - name: raid-storage
+      mountPath: /data/plugins/Essentials/userdata
+      subPath: plugins/Essentials/userdata
+    - name: server-data
+      mountPath: /data/plugins/ScriptBlockPlus
+      subPath: plugins/ScriptBlockPlus
+      readOnly: true
+    - name: raid-storage
+      mountPath: /data/plugins/ScriptBlockPlus/json/playercount
+      subPath: plugins/ScriptBlockPlus/json/playercount
+    - name: raid-storage
+      mountPath: /data/plugins/JoinNotifier
+      subPath: plugins/JoinNotifier
+    - name: raid-storage
+      mountPath: /data/plugins/LifeCore
+      subPath: plugins/LifeCore
+    - name: raid-storage
+      mountPath: /data/plugins/AzisabaAPI
+      subPath: plugins/AzisabaAPI
+    - name: raid-storage
+      mountPath: /data/plugins/PlayerLimit
+      subPath: plugins/PlayerLimit
+    - name: raid-storage
+      mountPath: /data/plugins/FastAsyncWorldEdit
+      subPath: plugins/FastAsyncWorldEdit
+    - name: raid-storage
+      mountPath: /data/plugins/AzisabaAds
+      subPath: plugins/AzisabaAds
+    - name: tab-config
+      mountPath: /plugins/TAB/config.yml
+      subPath: config.yml
+    - name: raid-storage
+      mountPath: /mnt/raid/srv/lifepve1
+  volumes:
+  - name: server-data
+    hostPath:
+      path: /srv/lifepve
+      type: Directory
+  - name: itemfixer-data
+    hostPath:
+      path: /srv/life/plugins/ItemFixer
+      type: Directory
+  - name: pve2-data
+    hostPath:
+      path: /srv/lifepve2
+      type: Directory
+  - name: tab-config
+    configMap:
+      name: common-life-server-tab-config-with-pvelevel
+  - name: raid-storage
+    hostPath:
+      path: /mnt/raid/srv/lifepve2
+      type: Directory
+  - name: raid-storage-pve-plugins
+    hostPath:
+      path: /mnt/raid/srv/lifepve/plugins
+      type: Directory
+  priorityClassName: minecraft-other-server
+  terminationGracePeriodSeconds: 60 # 1分
 ---
 apiVersion: v1
 kind: Service
