@@ -15,7 +15,7 @@ spec:
         app: server-lifepve2
         stage: production
         kuvel.azisaba.net/enable-server-discovery: "true"
-        kuvel.azisaba.net/preferred-server-name: lifepve2
+        # kuvel.azisaba.net/preferred-server-name: lifepve2
         kuvel.azisaba.net/disable-name-suffix: "true"
     spec:
       nodeName: saba12
