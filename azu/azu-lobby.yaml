@@ -1,26 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: server-<server-name>
+  name: server-azu-lobby
 spec:
   selector:
     matchLabels:
-      app: server-<server-name>
+      app: server-azu-lobby
   strategy:
     type: Recreate
   revisionHistoryLimit: 2
   template:
     metadata:
       labels:
-        app: server-<server-name>
+        app: server-azu-lobby
         stage: production
         kuvel.azisaba.net/enable-server-discovery: "true"
-        kuvel.azisaba.net/preferred-server-name: <server-name>
+        kuvel.azisaba.net/preferred-server-name: azu-lobby
     spec:
-      # サーバーを動かしたい物理サーバーを指定する
       nodeName: saba8
       containers:
-        - name: server-<server-name>
+        - name: server-azu-lobby
           # Dockerイメージの指定
           # Javaバージョン早見表
           # 1.14.4以下 ... 8
@@ -29,8 +28,8 @@ spec:
           # 1.17.x ... 16-17 (16はサポート終了)
           # 1.18.x～1.20.4 ... 17 (一部は21まで可能)
           # 1.20.5〜1.21.x ... 21
-          # 26.1以降 ... 25
-          image: itzg/minecraft-server:java17
+          # 26以降 ... 25
+          image: itzg/minecraft-server:java21
           workingDir: /data
           imagePullPolicy: Always
           resources:
@@ -54,18 +53,12 @@ spec:
             # 最適化されたJVMフラグを使用する
             - name: USE_AIKAR_FLAGS
               value: "true"
-            # UID
-            - name: UID
-              value: "0"
-            # GID
-            - name: GID
-              value: "1021"
             # Minecraftバージョン
             - name: VERSION
-              value: 1.16.5
+              value: 1.21.11
             # 初期・最大メモリ
             - name: MEMORY
-              value: 8G
+              value: 4G
             # JVM -Dオプション
             - name: JVM_DD_OPTS
               value: "Paper.IgnoreJavaVersion:true"
@@ -110,9 +103,8 @@ spec:
               subPath: config.yml
       volumes:
         - name: server-data
-          hostPath:
-            path: /srv/<server-name>
-            type: Directory
+          persistentVolumeClaim:
+            claimName: server-azu-lobby-data-claim
         - name: tab-config
           configMap:
             name: common-life-server-tab-config
@@ -120,13 +112,25 @@ spec:
       terminationGracePeriodSeconds: 60 # 1分
 ---
 apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: server-azu-lobby-data-claim
+spec:
+  storageClassName: nfs-client
+  accessModes:
+  - "ReadWriteMany"
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
 kind: Service
 metadata:
-  name: server-<server-name>-svc
+  name: server-azu-lobby-svc
 spec:
   type: ClusterIP
   selector:
-    app: server-<server-name>
+    app: server-azu-lobby
     stage: production
   ports:
     - port: 25565
