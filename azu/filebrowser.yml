@@ -20,9 +20,8 @@ spec:
         volumeMounts:
         - mountPath: /database
           name: filebrowser-database
-        - mountPath: /.filebrowser.json
+        - mountPath: /config
           name: filebrowser-config
-          subPath: ".filebrowser.json"
         - mountPath: /srv/azu-lobby
           name: azu-lobby
         resources:
@@ -41,6 +40,9 @@ spec:
       - name: filebrowser-config
         configMap:
           name: filebrowser-azu-config
+          items:
+          - key: settings.json
+            path: settings.json
       - name: azu-lobby
         persistentVolumeClaim:
           claimName: server-azu-lobby-data-claim
@@ -51,7 +53,7 @@ kind: ConfigMap
 metadata:
   name: filebrowser-azu-config
 data:
-  .filebrowser.json: |
+  settings.json: |
     {
       "port": 8080,
       "baseURL": "",
