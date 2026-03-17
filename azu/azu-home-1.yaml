@@ -34,7 +34,7 @@ spec:
           imagePullPolicy: Always
           resources:
             requests:
-              memory: "4Gi"
+              memory: "6Gi"
           ports:
             - containerPort: 25565
           env:
@@ -55,7 +55,7 @@ spec:
               value: 1.21.11
             # 初期・最大メモリ
             - name: MEMORY
-              value: 4G
+              value: 6G
             # JVM -Dオプション
             - name: JVM_DD_OPTS
               value: "Paper.IgnoreJavaVersion:true"

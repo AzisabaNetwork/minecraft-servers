@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: server-azu-resource
+  name: server-azu-resource-1
 spec:
   selector:
     matchLabels:
-      app: server-azu-resource
+      app: server-azu-resource-1
   strategy:
     type: Recreate
   revisionHistoryLimit: 2
   template:
     metadata:
       labels:
-        app: server-azu-resource
+        app: server-azu-resource-1
         stage: production
         kuvel.azisaba.net/enable-server-discovery: "true"
-        kuvel.azisaba.net/preferred-server-name: azu-resource
+        kuvel.azisaba.net/preferred-server-name: azu-resource-1
     spec:
       nodeName: saba8
       containers:
-        - name: server-azu-resource
+        - name: server-azu-resource-1
           # Dockerイメージの指定
           # Javaバージョン早見表
           # 1.14.4以下 ... 8
@@ -34,7 +34,7 @@ spec:
           imagePullPolicy: Always
           resources:
             requests:
-              memory: "4Gi"
+              memory: "7Gi"
           ports:
             - containerPort: 25565
           env:
@@ -55,7 +55,7 @@ spec:
               value: 1.21.11
             # 初期・最大メモリ
             - name: MEMORY
-              value: 4G
+              value: 7G
             # JVM -Dオプション
             - name: JVM_DD_OPTS
               value: "Paper.IgnoreJavaVersion:true"
@@ -123,11 +123,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: server-azu-resource-svc
+  name: server-azu-resource-1-svc
 spec:
   type: ClusterIP
   selector:
-    app: server-azu-resource
+    app: server-azu-resource-1
     stage: production
   ports:
     - port: 25565

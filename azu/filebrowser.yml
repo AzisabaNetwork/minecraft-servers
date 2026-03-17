@@ -24,8 +24,8 @@ spec:
           name: filebrowser-config
         - mountPath: /srv/azu-lobby
           name: azu-lobby
-        - mountPath: /srv/azu-resource
-          name: azu-resource
+        - mountPath: /srv/azu-resource-1
+          name: azu-resource-1
         - mountPath: /srv/azu-pve-1
           name: azu-pve-1
         - mountPath: /srv/azu-home-1
@@ -52,7 +52,7 @@ spec:
       - name: azu-lobby
         persistentVolumeClaim:
           claimName: server-azu-lobby-data-claim
-      - name: azu-resource
+      - name: azu-resource-1
         persistentVolumeClaim:
           claimName: server-azu-resource-data-claim
       - name: azu-pve-1
