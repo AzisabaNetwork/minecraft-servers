@@ -17,6 +17,7 @@ spec:
         kuvel.azisaba.net/enable-server-discovery: "true"
         kuvel.azisaba.net/preferred-server-name: azu-pve-1
     spec:
+      nodeName: saba10
       containers:
         - name: server-azu-pve-1
           # Dockerイメージの指定
