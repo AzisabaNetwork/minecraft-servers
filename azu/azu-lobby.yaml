@@ -17,7 +17,6 @@ spec:
         kuvel.azisaba.net/enable-server-discovery: "true"
         kuvel.azisaba.net/preferred-server-name: azu-lobby
     spec:
-      nodeName: saba8
       containers:
         - name: server-azu-lobby
           # Dockerイメージの指定
