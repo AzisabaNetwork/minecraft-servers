@@ -24,6 +24,8 @@ spec:
           name: filebrowser-config
         - mountPath: /srv/azu-lobby
           name: azu-lobby
+        - mountPath: /srv/azu-resource
+          name: azu-resource
         resources:
           requests:
             cpu: "50m"
@@ -46,6 +48,9 @@ spec:
       - name: azu-lobby
         persistentVolumeClaim:
           claimName: server-azu-lobby-data-claim
+      - name: azu-resource
+        persistentVolumeClaim:
+          claimName: server-azu-resource-data-claim
       # priorityClassName: minecraft-other-server
 ---
 apiVersion: v1
