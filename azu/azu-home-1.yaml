@@ -16,7 +16,6 @@ spec:
         stage: production
         kuvel.azisaba.net/enable-server-discovery: "true"
         kuvel.azisaba.net/preferred-server-name: azu-home-1
-        kuvel.azisaba.net/disable-name-suffix: "true"
     spec:
       containers:
         - name: server-azu-home-1
