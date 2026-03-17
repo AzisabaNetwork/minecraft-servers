@@ -26,6 +26,10 @@ spec:
           name: azu-lobby
         - mountPath: /srv/azu-resource
           name: azu-resource
+        - mountPath: /srv/azu-pve-1
+          name: azu-pve-1
+        - mountPath: /srv/azu-home-1
+          name: azu-home-1
         resources:
           requests:
             cpu: "50m"
@@ -51,6 +55,12 @@ spec:
       - name: azu-resource
         persistentVolumeClaim:
           claimName: server-azu-resource-data-claim
+      - name: azu-pve-1
+        persistentVolumeClaim:
+          claimName: server-azu-pve-1-data-claim
+      - name: azu-home-1
+        persistentVolumeClaim:
+          claimName: server-azu-home-1-data-claim
       # priorityClassName: minecraft-other-server
 ---
 apiVersion: v1
