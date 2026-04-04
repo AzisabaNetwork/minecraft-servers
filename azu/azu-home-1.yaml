@@ -45,7 +45,9 @@ spec:
               value: "true"
             # サーバーの種類
             - name: TYPE
-              value: PAPER
+              value: CUSTOM
+            - name: CUSTOM_SERVER
+              value: "asp-server.jar"
             # 最適化されたJVMフラグを使用する
             - name: USE_AIKAR_FLAGS
               value: "true"

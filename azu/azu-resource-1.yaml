@@ -34,7 +34,7 @@ spec:
           imagePullPolicy: Always
           resources:
             requests:
-              memory: "7Gi"
+              memory: "6Gi"
           ports:
             - containerPort: 25565
           env:
@@ -46,7 +46,9 @@ spec:
               value: "true"
             # サーバーの種類
             - name: TYPE
-              value: PAPER
+              value: CUSTOM
+            - name: CUSTOM_SERVER
+              value: "asp-server.jar"
             # 最適化されたJVMフラグを使用する
             - name: USE_AIKAR_FLAGS
               value: "true"
@@ -55,7 +57,7 @@ spec:
               value: 1.21.11
             # 初期・最大メモリ
             - name: MEMORY
-              value: 7G
+              value: 6G
             # JVM -Dオプション
             - name: JVM_DD_OPTS
               value: "Paper.IgnoreJavaVersion:true"
