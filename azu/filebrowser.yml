@@ -15,52 +15,52 @@ spec:
         app: filebrowser-azu
     spec:
       containers:
-        - name: filebrowser-azu
-          image: filebrowser/filebrowser
-          volumeMounts:
-            - mountPath: /database
-              name: filebrowser-database
-            - mountPath: /config
-              name: filebrowser-config
-            - mountPath: /srv/azu-lobby
-              name: azup1
-            - mountPath: /srv/azu-pve-1
-              name: azup2
-            - mountPath: /srv/azu-resource-1
-              name: azus1
-            - mountPath: /srv/azu-home-1
-              name: azus2
-          resources:
-            requests:
-              cpu: "50m"
-              memory: "100Mi"
-            limits:
-              cpu: "100m"
-              memory: "500Mi"
-          ports:
-            - containerPort: 80
+      - name: filebrowser-azu
+        image: filebrowser/filebrowser
+        volumeMounts:
+        - mountPath: /database
+          name: filebrowser-database
+        - mountPath: /config
+          name: filebrowser-config
+        - mountPath: /srv/azu-lobby
+          name: azu-lobby
+        - mountPath: /srv/azu-resource-1
+          name: azu-resource-1
+        - mountPath: /srv/azu-pve-1
+          name: azu-pve-1
+        - mountPath: /srv/azu-home-1
+          name: azu-home-1
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "100Mi"
+          limits:
+            cpu: "100m"
+            memory: "500Mi"
+        ports:
+        - containerPort: 80
       volumes:
-        - name: filebrowser-database
-          persistentVolumeClaim:
-            claimName: filebrowser-azu-database
-        - name: filebrowser-config
-          configMap:
-            name: filebrowser-azu-config
-            items:
-              - key: settings.json
-                path: settings.json
-        - name: azu-lobby
-          persistentVolumeClaim:
-            claimName: server-azu-lobby-data-claim
-        - name: azu-resource-1
-          persistentVolumeClaim:
-            claimName: server-azu-resource-data-claim
-        - name: azu-pve-1
-          persistentVolumeClaim:
-            claimName: server-azu-pve-1-data-claim
-        - name: azu-home-1
-          persistentVolumeClaim:
-            claimName: server-azu-home-1-data-claim
+      - name: filebrowser-database
+        persistentVolumeClaim:
+          claimName: filebrowser-azu-database
+      - name: filebrowser-config
+        configMap:
+          name: filebrowser-azu-config
+          items:
+          - key: settings.json
+            path: settings.json
+      - name: azu-lobby
+        persistentVolumeClaim:
+          claimName: server-azu-lobby-data-claim
+      - name: azu-resource-1
+        persistentVolumeClaim:
+          claimName: server-azu-resource-data-claim
+      - name: azu-pve-1
+        persistentVolumeClaim:
+          claimName: server-azu-pve-1-data-claim
+      - name: azu-home-1
+        persistentVolumeClaim:
+          claimName: server-azu-home-1-data-claim
       # priorityClassName: minecraft-other-server
 ---
 apiVersion: v1
@@ -85,7 +85,7 @@ metadata:
 spec:
   storageClassName: nfs-client
   accessModes:
-    - "ReadWriteMany"
+  - "ReadWriteMany"
   resources:
     requests:
       storage: 1Gi
