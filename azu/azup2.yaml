@@ -1,24 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: server-azu-lobby
+  name: server-azup2
 spec:
   selector:
     matchLabels:
-      app: server-azu-lobby
+      app: server-azup2
   strategy:
     type: Recreate
   revisionHistoryLimit: 2
   template:
     metadata:
       labels:
-        app: server-azu-lobby
+        app: server-azup2
         stage: production
         kuvel.azisaba.net/enable-server-discovery: "true"
-        kuvel.azisaba.net/preferred-server-name: azu-lobby
+        kuvel.azisaba.net/preferred-server-name: azup2
     spec:
+      nodeName: saba10
       containers:
-        - name: server-azu-lobby
+        - name: server-azup2
           # Dockerイメージの指定
           # Javaバージョン早見表
           # 1.14.4以下 ... 8
@@ -45,9 +46,7 @@ spec:
               value: "true"
             # サーバーの種類
             - name: TYPE
-              value: CUSTOM
-            - name: CUSTOM_SERVER
-              value: "asp-server.jar"
+              value: PAPER
             # 最適化されたJVMフラグを使用する
             - name: USE_AIKAR_FLAGS
               value: "true"
@@ -102,7 +101,7 @@ spec:
       volumes:
         - name: server-data
           persistentVolumeClaim:
-            claimName: server-azu-lobby-data-claim
+            claimName: server-azu-pve-1-data-claim
         - name: tab-config
           configMap:
             name: common-life-server-tab-config
@@ -112,23 +111,23 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: server-azu-lobby-data-claim
+  name: server-azu-pve-1-data-claim
 spec:
   storageClassName: nfs-client
   accessModes:
-  - "ReadWriteMany"
+    - "ReadWriteMany"
   resources:
     requests:
-      storage: 10Gi
+      storage: 20Gi
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: server-azu-lobby-svc
+  name: server-azup2-svc
 spec:
   type: ClusterIP
   selector:
-    app: server-azu-lobby
+    app: server-azup2
     stage: production
   ports:
     - port: 25565
