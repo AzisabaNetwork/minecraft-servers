@@ -1,25 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: server-azu-resource-1
+  name: server-azus2
 spec:
   selector:
     matchLabels:
-      app: server-azu-resource-1
+      app: server-azus2
   strategy:
     type: Recreate
   revisionHistoryLimit: 2
   template:
     metadata:
       labels:
-        app: server-azu-resource-1
+        app: server-azus2
         stage: production
         kuvel.azisaba.net/enable-server-discovery: "true"
-        kuvel.azisaba.net/preferred-server-name: azu-resource-1
+        kuvel.azisaba.net/preferred-server-name: azus2
     spec:
-      nodeName: saba10
       containers:
-        - name: server-azu-resource-1
+        - name: server-azus2
           # Dockerイメージの指定
           # Javaバージョン早見表
           # 1.14.4以下 ... 8
@@ -103,7 +102,7 @@ spec:
       volumes:
         - name: server-data
           persistentVolumeClaim:
-            claimName: server-azu-resource-data-claim
+            claimName: server-azu-home-1-data-claim
         - name: tab-config
           configMap:
             name: common-life-server-tab-config
@@ -113,11 +112,11 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: server-azu-resource-data-claim
+  name: server-azu-home-1-data-claim
 spec:
   storageClassName: nfs-client
   accessModes:
-  - "ReadWriteMany"
+    - "ReadWriteMany"
   resources:
     requests:
       storage: 20Gi
@@ -125,11 +124,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: server-azu-resource-1-svc
+  name: server-azus2-svc
 spec:
   type: ClusterIP
   selector:
-    app: server-azu-resource-1
+    app: server-azus2
     stage: production
   ports:
     - port: 25565
