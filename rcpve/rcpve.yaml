@@ -16,6 +16,8 @@ spec:
         stage: production
         kuvel.azisaba.net/enable-server-discovery: "true"
         kuvel.azisaba.net/preferred-server-name: rcpve
+        kuvel.azisaba.net/disable-load-balancer: "true"
+        kuvel.azisaba.net/disable-name-suffix: "true"
     spec:
       nodeName: saba10 # it does not need to be on saba10, we just need to avoid saba9
       containers:
