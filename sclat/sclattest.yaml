@@ -16,6 +16,8 @@ spec:
         stage: production
         kuvel.azisaba.net/enable-server-discovery: "true"
         kuvel.azisaba.net/preferred-server-name: sclattest
+        kuvel.azisaba.net/disable-load-balancer: "true"
+        kuvel.azisaba.net/disable-name-suffix: "true"
     spec:
       # サーバーを動かしたい物理サーバーを指定する
       nodeName: saba8
