@@ -16,6 +16,8 @@ spec:
         stage: production
         kuvel.azisaba.net/enable-server-discovery: "true"
         kuvel.azisaba.net/preferred-server-name: lgw2sv1
+        kuvel.azisaba.net/disable-load-balancer: "true"
+        kuvel.azisaba.net/disable-name-suffix: "true"
     spec:
       nodeName: saba8
       containers:
