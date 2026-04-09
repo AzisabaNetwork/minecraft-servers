@@ -1,9 +1,8 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: server-sclattutorial
 spec:
-  serviceName: "server-sclattutorial"
   selector:
     matchLabels:
       app: server-sclattutorial

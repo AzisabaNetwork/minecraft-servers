@@ -1,9 +1,8 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: server-sclat
 spec:
-  serviceName: "server-sclat"
   selector:
     matchLabels:
       app: server-sclat
