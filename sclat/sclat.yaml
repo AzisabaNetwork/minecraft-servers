@@ -1,14 +1,15 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: server-sclat
 spec:
+  serviceName: "server-sclat"
   selector:
     matchLabels:
       app: server-sclat
   strategy:
     type: Recreate
-  revisionHistoryLimit: 2
+  replicas: 1
   template:
     metadata:
       labels:

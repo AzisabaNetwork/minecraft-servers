@@ -1,14 +1,15 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: server-sclattest
 spec:
+  serviceName: "server-sclattest"
   selector:
     matchLabels:
       app: server-sclattest
   strategy:
     type: Recreate
-  revisionHistoryLimit: 2
+  replicas: 1
   template:
     metadata:
       labels:

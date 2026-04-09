@@ -1,14 +1,15 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: server-sclattutorial
 spec:
+  serviceName: "server-sclattutorial"
   selector:
     matchLabels:
       app: server-sclattutorial
   strategy:
     type: Recreate
-  revisionHistoryLimit: 2
+  replicas: 1
   template:
     metadata:
       labels:
