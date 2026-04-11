@@ -134,3 +134,6 @@ spec:
     - name: share
       port: 25600
       targetPort: 25600
+    - name: share-unknown
+      port: 7900
+      targetPort: 7900
