@@ -130,16 +130,5 @@ spec:
   ports:
     - port: 25565
       targetPort: 25565
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: server-sclat-svc
-spec:
-  type: ClusterIP
-  selector:
-    app: server-sclat
-    stage: production
-    ports:
-      - port: 25590
-        targetPort: 25590
+    - port: 25590
+      targetPort: 25590

@@ -130,16 +130,5 @@ spec:
   ports:
     - port: 25565
       targetPort: 25565
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: server-sclattutorial-svc
-spec:
-  type: ClusterIP
-  selector:
-    app: server-sclattutorial
-    stage: production
-    ports:
-      - port: 28000
-        targetPort: 28000
+    - port: 28000
+      targetPort: 28000
