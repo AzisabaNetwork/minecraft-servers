@@ -130,5 +130,16 @@ spec:
   ports:
     - port: 25565
       targetPort: 25565
-    - port: 25600
-      targetPort: 25600
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-sclattest-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: server-sclattest
+    stage: production
+    ports:
+      - port: 25600
+        targetPort: 25600
