@@ -138,7 +138,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: server-sclat
+    app: server-sclattest
     stage: production
   ports:
     - port: 25600
