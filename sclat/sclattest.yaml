@@ -140,5 +140,5 @@ spec:
     app: server-sclat
     stage: production
   ports:
-    - port: 28000
-      targetPort: 28000
+    - port: 25600
+      targetPort: 25600
