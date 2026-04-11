@@ -121,7 +121,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: server-sclattest
+  name: server-sclattest-svc
 spec:
   type: ClusterIP
   selector:
