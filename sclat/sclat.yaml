@@ -8,7 +8,7 @@ spec:
       app: server-sclat
   strategy:
     type: Recreate
-  revisionHistoryLimit: 2
+  replicas: 1
   template:
     metadata:
       labels:
@@ -16,6 +16,8 @@ spec:
         stage: production
         kuvel.azisaba.net/enable-server-discovery: "true"
         kuvel.azisaba.net/preferred-server-name: sclat
+        kuvel.azisaba.net/disable-load-balancer: "true"
+        kuvel.azisaba.net/disable-name-suffix: "true"
     spec:
       # サーバーを動かしたい物理サーバーを指定する
       nodeName: saba8
@@ -34,7 +36,8 @@ spec:
           imagePullPolicy: Always
           resources:
             requests:
-              memory: "4Gi"
+              cpu: "100m"
+              memory: "8Gi"
             limits:
               cpu: "1000m"
               memory: "12Gi" # limitを超えるとpodが即座にOOMKilledされてしまうため(MAX_)MEMORY + 8Gぐらいにして余裕を持たせる
@@ -125,18 +128,9 @@ spec:
     app: server-sclat
     stage: production
   ports:
-    - port: 25565
+    - name: minecraft
+      port: 25565
       targetPort: 25565
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: azisaba-sclat
-spec:
-  type: ClusterIP
-  selector:
-    app: server-sclat
-    stage: production
-  ports:
-    - port: 28000
-      targetPort: 28000
+    - name: share
+      port: 25590
+      targetPort: 25590
