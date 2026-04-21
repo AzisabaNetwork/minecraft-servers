@@ -15,35 +15,37 @@ spec:
         app: filebrowser-coasts
     spec:
       containers:
-      - name: filebrowser-coasts
-        image: filebrowser/filebrowser
-        volumeMounts:
-        - mountPath: /database
-          name: filebrowser-database
-        - mountPath: /.filebrowser.json
-          name: filebrowser-config
-          subPath: ".filebrowser.json"
-        - mountPath: /srv/coasts
-          name: coasts-data
-        resources:
-          requests:
-            cpu: "50m"
-            memory: "100Mi"
-          limits:
-            cpu: "100m"
-            memory: "500Mi"
-        ports:
-        - containerPort: 80
+        - name: filebrowser-coasts
+          image: filebrowser/filebrowser
+          volumeMounts:
+            - mountPath: /database
+              name: filebrowser-database
+            - mountPath: /config
+              name: filebrowser-config
+            - mountPath: /srv/coasts
+              name: coasts-data
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "100Mi"
+            limits:
+              cpu: "100m"
+              memory: "500Mi"
+          ports:
+            - containerPort: 80
       volumes:
-      - name: filebrowser-database
-        persistentVolumeClaim:
-          claimName: filebrowser-coasts-database
-      - name: filebrowser-config
-        configMap:
-          name: filebrowser-coasts-config
-      - name: coasts-data
-        persistentVolumeClaim:
-          claimName: server-coasts-data-claim
+        - name: filebrowser-database
+          persistentVolumeClaim:
+            claimName: filebrowser-coasts-database
+        - name: filebrowser-config
+          configMap:
+            name: filebrowser-coasts-config
+            items:
+              - key: settings.json
+                path: settings.json
+        - name: coasts-data
+          persistentVolumeClaim:
+            claimName: server-coasts-data-claim
       # priorityClassName: minecraft-other-server
 ---
 apiVersion: v1
@@ -51,9 +53,9 @@ kind: ConfigMap
 metadata:
   name: filebrowser-coasts-config
 data:
-  .filebrowser.json: |
+  settings.json: |
     {
-      "port": 80,
+      "port": 8080,
       "baseURL": "",
       "address": "",
       "log": "stdout",
@@ -68,7 +70,7 @@ metadata:
 spec:
   storageClassName: nfs-client
   accessModes:
-  - "ReadWriteMany"
+    - "ReadWriteMany"
   resources:
     requests:
       storage: 1Gi
@@ -83,4 +85,4 @@ spec:
     app: filebrowser-coasts
   ports:
     - port: 80
-      targetPort: 80
+      targetPort: 8080
