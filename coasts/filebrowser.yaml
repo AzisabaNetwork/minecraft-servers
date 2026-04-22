@@ -24,6 +24,8 @@ spec:
               name: filebrowser-config
             - mountPath: /srv/coasts
               name: coasts-data
+            - mountPath: /srv/coasts-caveworld-template
+              name: coasts-caveworld-template
           resources:
             requests:
               cpu: "50m"
@@ -46,6 +48,9 @@ spec:
         - name: coasts-data
           persistentVolumeClaim:
             claimName: server-coasts-data-claim
+        - name: coasts-caveworld-template
+          persistentVolumeClaim:
+            claimName: server-coasts-caveworld-template-claim
       # priorityClassName: minecraft-other-server
 ---
 apiVersion: v1

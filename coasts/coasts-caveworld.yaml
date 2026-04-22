@@ -1,0 +1,147 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-coasts-caveworld
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: server-coasts-caveworld
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  revisionHistoryLimit: 2
+  template:
+    metadata:
+      labels:
+        app: server-coasts-caveworld
+        stage: production
+        server-role: bonus-stage
+        kuvel.azisaba.net/enable-server-discovery: "true"
+        kuvel.azisaba.net/preferred-server-name: coasts-caveworld
+        kuvel.azisaba.net/disable-load-balancer: "true"
+    spec:
+      initContainers:
+        - name: copy-server-template
+          image: alpine:3.20
+          command:
+            - sh
+            - -c
+            - |
+              set -eu
+              cp -a /template/. /data/
+          volumeMounts:
+            - name: server-template
+              mountPath: /template
+              readOnly: true
+            - name: server-data
+              mountPath: /data
+      containers:
+        - name: server-coasts-caveworld
+          # ボーナスステージ用の使い捨てMinecraftサーバー。
+          # 起動時にテンプレートPVCの全データを/dataへコピーし、Pod終了時に変更は破棄される。
+          image: itzg/minecraft-server:java21
+          workingDir: /data
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "4Gi"
+            limits:
+              cpu: "10000m"
+              memory: "16Gi" # limitを超えるとpodが即座にOOMKilledされてしまうため(MAX_)MEMORY + 8Gぐらいにして余裕を持たせる
+          ports:
+            - containerPort: 25565
+          env:
+            # タイムゾーン
+            - name: TZ
+              value: "Asia/Tokyo"
+            # EULAに同意する
+            - name: EULA
+              value: "true"
+            # サーバーの種類
+            - name: TYPE
+              value: FOLIA
+            # 最適化されたJVMフラグを使用する
+            - name: USE_AIKAR_FLAGS
+              value: "true"
+            # Minecraftバージョン
+            - name: VERSION
+              value: 1.21.11
+            # 初期・最大メモリ
+            - name: MEMORY
+              value: 8G
+            # JVM -Dオプション
+            - name: JVM_DD_OPTS
+              value: "Paper.IgnoreJavaVersion:true"
+            # yml内のCFG_なんとかを置き換えるためのもの
+            - name: ENV_VARIABLE_PREFIX
+              value: "CFG_"
+            # メタデータ(サーバー内で環境変数で取得可能)
+            - name: CFG_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: CFG_POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: CFG_SERVER_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['kuvel.azisaba.net/preferred-server-name']
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: SERVER_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['kuvel.azisaba.net/preferred-server-name']
+          startupProbe:
+            tcpSocket:
+              port: 25565
+            failureThreshold: 60 # 600秒
+            periodSeconds: 10
+          volumeMounts:
+            - name: server-data
+              mountPath: /data
+      volumes:
+        - name: server-data
+          emptyDir: {}
+        - name: server-template
+          persistentVolumeClaim:
+            claimName: server-coasts-caveworld-template-claim
+            readOnly: true
+      priorityClassName: minecraft-other-server
+      terminationGracePeriodSeconds: 60 # 1分
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: server-coasts-caveworld-template-claim
+spec:
+  storageClassName: nfs-client
+  accessModes:
+  - "ReadWriteMany"
+  resources:
+    requests:
+      storage: 50Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-coasts-caveworld-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: server-coasts-caveworld
+    stage: production
+  ports:
+    - port: 25565
+      targetPort: 25565
