@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: server-coasts-caveworld
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: server-coasts-caveworld
@@ -32,6 +32,9 @@ spec:
             - |
               set -eu
               cp -a /template/. /data/
+              echo "Copied server template into /data"
+              du -sh /template /data || true
+              ls -la /data | head
           volumeMounts:
             - name: server-template
               mountPath: /template
@@ -47,11 +50,11 @@ spec:
           imagePullPolicy: Always
           resources:
             requests:
-              cpu: "1000m"
+              cpu: "500m"
               memory: "4Gi"
             limits:
-              cpu: "10000m"
-              memory: "16Gi" # limitを超えるとpodが即座にOOMKilledされてしまうため(MAX_)MEMORY + 8Gぐらいにして余裕を持たせる
+              cpu: "2000m"
+              memory: "6Gi" # limitを超えるとpodが即座にOOMKilledされてしまうため、MEMORYより余裕を持たせる
           ports:
             - containerPort: 25565
           env:
@@ -72,7 +75,7 @@ spec:
               value: 1.21.11
             # 初期・最大メモリ
             - name: MEMORY
-              value: 8G
+              value: 3G
             # JVM -Dオプション
             - name: JVM_DD_OPTS
               value: "Paper.IgnoreJavaVersion:true"
