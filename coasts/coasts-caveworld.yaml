@@ -20,7 +20,7 @@ spec:
         stage: production
         server-role: bonus-stage
         kuvel.azisaba.net/enable-server-discovery: "true"
-        kuvel.azisaba.net/preferred-server-name: coasts-caveworld
+        kuvel.azisaba.net/disable-name-suffix: "true"
         kuvel.azisaba.net/disable-load-balancer: "true"
     spec:
       initContainers:
