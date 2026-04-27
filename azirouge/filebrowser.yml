@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: filebrowser-azirouge
+  namespace: minecraft
+spec:
+  selector:
+    matchLabels:
+      app: filebrowser-azirouge
+  replicas: 1
+  revisionHistoryLimit: 2
+  template:
+    metadata:
+      labels:
+        app: filebrowser-azirouge
+    spec:
+      containers:
+        - name: filebrowser-azirouge
+          image: filebrowser/filebrowser
+          volumeMounts:
+            - mountPath: /database
+              name: filebrowser-database
+            - mountPath: /config
+              name: filebrowser-config
+            - mountPath: /srv/azirouge
+              name: azirouge-data
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "100Mi"
+            limits:
+              cpu: "100m"
+              memory: "500Mi"
+          ports:
+            - containerPort: 80
+      volumes:
+        - name: filebrowser-database
+          persistentVolumeClaim:
+            claimName: filebrowser-azirouge-database
+        - name: filebrowser-config
+          configMap:
+            name: filebrowser-azirouge-config
+            items:
+              - key: settings.json
+                path: settings.json
+        - name: azirouge-data
+          persistentVolumeClaim:
+            claimName: server-azirouge-data-claim
+      # priorityClassName: minecraft-other-server
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: filebrowser-azirouge-config
+data:
+  settings.json: |
+    {
+      "port": 8080,
+      "baseURL": "",
+      "address": "",
+      "log": "stdout",
+      "database": "/database/filebrowser.db",
+      "root": "/srv"
+    }
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: filebrowser-azirouge-database
+spec:
+  storageClassName: nfs-client
+  accessModes:
+    - "ReadWriteMany"
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: filebrowser-azirouge-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: filebrowser-azirouge
+  ports:
+    - port: 80
+      targetPort: 8080
