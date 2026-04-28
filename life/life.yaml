@@ -37,6 +37,8 @@ spec:
         resources:
           requests:
             memory: "16Gi"
+          limits:
+            memory: "24Gi"
         ports:
           - containerPort: 25565
         env:
