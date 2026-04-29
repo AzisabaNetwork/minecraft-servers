@@ -14,7 +14,7 @@ spec:
       labels:
         app: server-azirouge
         stage: production
-        kuvel.azisaba.net/enable-server-discovery: "true"
+        kuvel.azisaba.net/enable-server-discovery: "false"
         kuvel.azisaba.net/preferred-server-name: azirouge
         kuvel.azisaba.net/disable-load-balancer: "true"
         kuvel.azisaba.net/disable-name-suffix: "true"
