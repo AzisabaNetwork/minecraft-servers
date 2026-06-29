@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: server-lgw2sv1
+  name: server-lgw2test
 spec:
   selector:
     matchLabels:
-      app: server-lgw2sv1
+      app: server-lgw2test
   strategy:
     type: Recreate
   revisionHistoryLimit: 2
   template:
     metadata:
       labels:
-        app: server-lgw2sv1
+        app: server-lgw2test
         stage: production
         kuvel.azisaba.net/enable-server-discovery: "true"
-        kuvel.azisaba.net/preferred-server-name: lgw2sv1
+        kuvel.azisaba.net/preferred-server-name: lgw2test
         kuvel.azisaba.net/disable-load-balancer: "true"
         kuvel.azisaba.net/disable-name-suffix: "true"
     spec:
       nodeName: saba8
       containers:
-      - name: server-lgw2sv1
+      - name: server-lgw2test
         # Dockerイメージの指定
         # java11の11の部分を8にしたり17にしたりなど、Minecraftバージョンによって適宜変えてください
         # Javaバージョン早見表
@@ -31,16 +31,16 @@ spec:
         # 1.17.x ... 16-17 (16はサポート終了)
         # 1.18.x～1.20.4 ... 17 (一部は21まで可能)
         # 1.20.5以降 ... 21
-        image: itzg/minecraft-server:java17
+        image: itzg/minecraft-server:java25
         workingDir: /data
         imagePullPolicy: Always
         resources:
           requests:
             cpu: "1000m"
-            memory: "8Gi"
+            memory: "4Gi"
           limits:
-            cpu: "10000m"
-            memory: "12Gi"
+            cpu: "2000m"
+            memory: "6Gi"
         ports:
           - containerPort: 25565
         env:
@@ -64,13 +64,11 @@ spec:
             value: "1021"
           # Minecraftバージョン
           - name: VERSION
-            value: 1.16.5
+            value: 1.21.11
           # 初期・最大メモリ
           - name: MEMORY
-            value: 8G
-          # JVM -Dオプション
-          - name: JVM_DD_OPTS
-            value: "Paper.IgnoreJavaVersion:true"
+            value: 4G
+          # yml内のCFG_なんとかを置き換えるためのもの
           - name: ENV_VARIABLE_PREFIX
             value: "CFG_"
           # メタデータ(サーバー内で環境変数で取得可能)
@@ -106,44 +104,13 @@ spec:
         volumeMounts:
         - name: server-data
           mountPath: /data
-        - name: server-data
-          mountPath: /data/plugins/LeonGunWar/main.yml
-          subPath: plugins/LeonGunWar/main.yml
-          readOnly: true
-        - name: lgw2-data
-          mountPath: /data/shared
-          subPath: shared
-        - name: lgw2-data
-          mountPath: /data/plugins/LeonCSAddon
-          subPath: plugins/LeonCSAddon
-          readOnly: true
-        - name: lgw2-data
-          mountPath: /data/plugins/CrackShot
-          subPath: plugins/CrackShot
-          readOnly: true
-        - name: lgw2-data
-          mountPath: /data/plugins/CrackShotPlus
-          subPath: plugins/CrackShotPlus
-          readOnly: true
-        - name: lgw2-data
-          mountPath: /data/plugins/AgetarouUniqueGuns
-          subPath: plugins/AgetarouUniqueGuns
-          readOnly: true
-        - name: lgw2-data
-          mountPath: /data/plugins/NameChangeAutomation/NameChangeInfo
-          subPath: plugins/NameChangeAutomation/NameChangeInfo
-          readOnly: true
         - name: tab-config
           mountPath: /plugins/TAB/config.yml
           subPath: config.yml
       volumes:
       - name: server-data
         hostPath:
-          path: /srv/lgw2sv1
-          type: Directory
-      - name: lgw2-data
-        hostPath:
-          path: /srv/lgw2
+          path: /srv/lgw2test
           type: Directory
       - name: tab-config
         configMap:
@@ -154,11 +121,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: server-lgw2sv1-svc
+  name: server-lgw2test-svc
 spec:
   type: ClusterIP
   selector:
-    app: server-lgw2sv1
+    app: server-lgw2test
     stage: production
   ports:
     - port: 25565
