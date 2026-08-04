@@ -1,0 +1,154 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-newliferesource
+spec:
+  selector:
+    matchLabels:
+      app: server-newliferesource
+  strategy:
+    type: Recreate
+  revisionHistoryLimit: 2
+  template:
+    metadata:
+      labels:
+        app: server-newliferesource
+        stage: production
+        kuvel.azisaba.net/enable-server-discovery: "true"
+        kuvel.azisaba.net/preferred-server-name: newliferesource
+        kuvel.azisaba.net/disable-load-balancer: "true"
+        kuvel.azisaba.net/disable-name-suffix: "true"
+    spec:
+      nodeName: saba16
+      containers:
+      - name: server-newliferesource
+        image: itzg/minecraft-server:java25
+        workingDir: /data
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "10Gi"
+          limits:
+            cpu: "6000m"
+            memory: "14Gi"
+        ports:
+          - containerPort: 25565
+        env:
+          - name: TZ
+            value: "Asia/Tokyo"
+          - name: EULA
+            value: "true"
+          - name: TYPE
+            value: PAPER
+          - name: USE_AIKAR_FLAGS
+            value: "true"
+          - name: SPAWN_PROTECTION
+            value: "0"
+          - name: ONLINE_MODE
+            value: "false"
+          - name: ENABLE_COMMAND_BLOCK
+            value: "true"
+          - name: ALLOW_NETHER
+            value: "false"
+          - name: ALLOW_FLIGHT
+            value: "true"
+          - name: VIEW_DISTANCE
+            value: "6"
+          - name: SNOOPER_ENABLED
+            value: "false"
+          - name: ANNOUNCE_PLAYER_ACHIEVEMENTS
+            value: "false"
+          - name: MAX_PLAYERS
+            value: "1000"
+          - name: UID
+            value: "0"
+          - name: GID
+            value: "1010"
+          - name: VERSION
+            value: 1.21.11
+          - name: MEMORY
+            value: 10G
+          - name: ENABLE_WHITELIST
+            value: "false"
+          - name: JVM_OPTS
+            value: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -DPaper.IgnoreJavaVersion=true -XX:+UseCompactObjectHeaders"
+          - name: ENV_VARIABLE_PREFIX
+            value: "CFG_"
+          - name: CFG_POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: CFG_POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: CFG_SERVER_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['kuvel.azisaba.net/preferred-server-name']
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: SERVER_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['kuvel.azisaba.net/preferred-server-name']
+        startupProbe:
+          tcpSocket:
+            port: 25565
+          failureThreshold: 60
+          periodSeconds: 10
+        volumeMounts:
+        - name: server-data
+          mountPath: /data
+        - name: itemfixer-data
+          mountPath: /data/plugins/ItemFixer
+          readOnly: true
+        - name: tab-config
+          mountPath: /plugins/TAB/config.yml
+          subPath: config.yml
+      volumes:
+      - name: server-data
+        hostPath:
+          path: /srv/newliferesource
+          type: Directory
+      - name: itemfixer-data
+        hostPath:
+          path: /srv/life/plugins/ItemFixer
+          type: Directory
+      - name: tab-config
+        configMap:
+          name: common-life-server-tab-config-with-pvelevel
+      priorityClassName: minecraft-other-server
+      terminationGracePeriodSeconds: 60
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-newliferesource-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: server-newliferesource
+    stage: production
+  ports:
+    - port: 25565
+      targetPort: 25565
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-newliferesource-prometheus-exporter-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: server-newliferesource
+    stage: production
+  ports:
+    - port: 9225
+      targetPort: 9225
