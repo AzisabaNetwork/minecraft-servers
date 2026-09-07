@@ -127,8 +127,12 @@ spec:
           subPath: plugins/CrackShotPlus
           readOnly: true
         - name: lgw2-data
-          mountPath: /data/plugins/AgetarouUniqueGuns
-          subPath: plugins/AgetarouUniqueGuns
+          mountPath: /data/plugins/AgetarouUniqueGuns/weapons
+          subPath: plugins/AgetarouUniqueGuns/weapons
+          readOnly: true
+        - name: lgw2-data
+          mountPath: /data/plugins/Koreomoiyo
+          subPath: plugins/Koreomoiyo
           readOnly: true
         - name: lgw2-data
           mountPath: /data/plugins/NameChangeAutomation/NameChangeInfo
