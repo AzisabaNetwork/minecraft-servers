@@ -29,7 +29,7 @@ spec:
           requests:
             memory: "10Gi"
           limits:
-            cpu: "6000m"
+            cpu: "2000m"
             memory: "14Gi"
         ports:
           - containerPort: 25565
