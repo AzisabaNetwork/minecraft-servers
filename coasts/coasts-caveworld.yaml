@@ -52,10 +52,10 @@ spec:
           resources:
             requests:
               cpu: "500m"
-              memory: "4Gi"
+              memory: "6Gi"
             limits:
               cpu: "2000m"
-              memory: "6Gi" # limitを超えるとpodが即座にOOMKilledされてしまうため、MEMORYより余裕を持たせる
+              memory: "6Gi" # requestと同じにする。 heap * 1.25が目安
           ports:
             - containerPort: 25565
           env:
@@ -76,7 +76,7 @@ spec:
               value: 1.21.11
             # 初期・最大メモリ
             - name: MEMORY
-              value: 3G
+              value: 4G
             # JVM -Dオプション
             - name: JVM_DD_OPTS
               value: "Paper.IgnoreJavaVersion:true"
