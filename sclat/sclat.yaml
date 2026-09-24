@@ -36,11 +36,11 @@ spec:
           imagePullPolicy: Always
           resources:
             requests:
-              cpu: "100m"
+              cpu: "1000m"
               memory: "8Gi"
             limits:
-              cpu: "1000m"
-              memory: "12Gi" # limitを超えるとpodが即座にOOMKilledされてしまうため(MAX_)MEMORY + 8Gぐらいにして余裕を持たせる
+              cpu: "5000m"
+              memory: "8Gi" # requestと同じにする。heap * 1.25が目安。
           ports:
             - containerPort: 25565
           env:
@@ -67,7 +67,7 @@ spec:
               value: 1.14.4
             # 初期・最大メモリ
             - name: MEMORY
-              value: 4G
+              value: 6G
             # yml内のCFG_なんとかを置き換えるためのもの
             - name: ENV_VARIABLE_PREFIX
               value: "CFG_"
