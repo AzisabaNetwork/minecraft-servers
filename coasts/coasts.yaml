@@ -42,7 +42,7 @@ spec:
               memory: "8Gi"
             limits: # 必ず設定する。これがないと、k8sはマシンに無限のリソースがあると考える。
               cpu: "5000m"
-              memory: "12Gi" # limit = heap領域 + off-heap領域 + 余裕分。目安はheap領域(-Xmx)の125%。limitを超えると即座にOOMKillされる。
+              memory: "8Gi" # limit = request = heap領域 + off-heap領域 + 余裕分。目安はheap領域(-Xmx)の125%。limitを超えると即座にOOMKillされる。
           ports:
             - containerPort: 25565
           env:
@@ -63,7 +63,7 @@ spec:
               value: 1.21.11
             # 初期・最大メモリ
             - name: MEMORY
-              value: 8G
+              value: 6G
             # JVM -Dオプション
             - name: JVM_DD_OPTS
               value: "Paper.IgnoreJavaVersion:true"
