@@ -37,10 +37,10 @@ spec:
           resources:
             requests:
               cpu: "1000m"
-              memory: "9Gi"
+              memory: "8Gi"
             limits:
               cpu: "10000m"
-              memory: "13Gi" # limitを超えるとpodが即座にOOMKilledされてしまうため多少の余裕をもたせる
+              memory: "8Gi"
           ports:
             - containerPort: 25565
           env:
@@ -61,7 +61,7 @@ spec:
               value: 1.21.11
             # 初期・最大メモリ
             - name: MEMORY
-              value: 8G
+              value: 6G
             # JVM -Dオプション
             - name: JVM_DD_OPTS
               value: "Paper.IgnoreJavaVersion:true"
