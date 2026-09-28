@@ -37,10 +37,10 @@ spec:
           resources:
             requests:
               cpu: "100m"
-              memory: "11Gi"
+              memory: "8Gi"
             limits:
               cpu: "1000m"
-              memory: "11Gi" # requestと同じにする。 heap * 1.25が目安
+              memory: "8Gi" # requestと同じにする。 heap * 1.25が目安
           ports:
             - containerPort: 25565
           env:
@@ -67,7 +67,7 @@ spec:
               value: 1.14.4
             # 初期・最大メモリ
             - name: MEMORY
-              value: 8G
+              value: 6G
             # yml内のCFG_なんとかを置き換えるためのもの
             - name: ENV_VARIABLE_PREFIX
               value: "CFG_"
