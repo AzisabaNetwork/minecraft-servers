@@ -40,7 +40,7 @@ spec:
             memory: "8Gi"
           limits:
             cpu: "10000m"
-            memory: "12Gi"
+            memory: "8Gi"
         ports:
           - containerPort: 25565
         env:
@@ -67,7 +67,7 @@ spec:
             value: 1.16.5
           # 初期・最大メモリ
           - name: MEMORY
-            value: 8G
+            value: 6G
           # JVM -Dオプション
           - name: JVM_DD_OPTS
             value: "Paper.IgnoreJavaVersion:true"
