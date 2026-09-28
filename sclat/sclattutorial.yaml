@@ -37,10 +37,10 @@ spec:
           resources:
             requests:
               cpu: "1000m"
-              memory: "8Gi"
+              memory: "6Gi"
             limits:
-              cpu: "5000m"
-              memory: "8Gi"
+              cpu: "3000m"
+              memory: "6Gi"
           ports:
             - containerPort: 25565
           env:
@@ -67,7 +67,7 @@ spec:
               value: 1.14.4
             # 初期・最大メモリ
             - name: MEMORY
-              value: 6G
+              value: 4G
             # yml内のCFG_なんとかを置き換えるためのもの
             - name: ENV_VARIABLE_PREFIX
               value: "CFG_"
