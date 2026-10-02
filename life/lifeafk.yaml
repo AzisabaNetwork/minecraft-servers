@@ -36,9 +36,9 @@ spec:
         imagePullPolicy: Always
         resources:
           requests:
-            memory: "4Gi"
+            memory: "6Gi"
           limits:
-            memory: "8Gi"
+            memory: "6Gi"
         ports:
           - containerPort: 25565
           - containerPort: 9225
