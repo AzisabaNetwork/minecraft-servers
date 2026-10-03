@@ -19,6 +19,15 @@ spec:
         kuvel.azisaba.net/disable-load-balancer: "true"
         kuvel.azisaba.net/disable-name-suffix: "true"
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: NotIn # 指定した値以外のノードを選択
+                values:
+                - saba16
       containers:
         - name: server-azicave
           # Dockerイメージの指定
