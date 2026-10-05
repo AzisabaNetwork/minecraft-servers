@@ -19,7 +19,7 @@ spec:
         kuvel.azisaba.net/disable-load-balancer: "true"
         kuvel.azisaba.net/disable-name-suffix: "true"
     spec:
-      nodeName: saba16
+      nodeName: saba17
       containers:
       - name: server-newliferesource
         image: itzg/minecraft-server:java25
