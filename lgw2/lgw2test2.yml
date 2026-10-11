@@ -107,6 +107,61 @@ spec:
         - name: tab-config
           mountPath: /plugins/TAB/config.yml
           subPath: config.yml
+        - name: msr-shared
+          mountPath: /data/shared
+          readOnly: false
+        - name: lgw2test-data
+          mountPath: /data/plugins/CrackShot
+          subPath: plugins/CrackShot
+          readOnly: true
+        - name: lgw2test-data
+          mountPath: /data/plugins/CrackShotPlus
+          subPath: plugins/CrackShotPlus
+          readOnly: true
+        - name: lgw2test-data
+          mountPath: /data/plugins/AgetarouUniqueGuns/weapons
+          subPath: plugins/AgetarouUniqueGuns/weapons
+          readOnly: true
+        - name: lgw2test-data
+          mountPath: /data/plugins/LeonCSAddon
+          subPath: plugins/LeonCSAddon
+          readOnly: true
+        - name: lgw2test-data
+          mountPath: /data/plugins/koreomoiyo
+          subPath: plugins/koreomoiyo
+          readOnly: true
+        - name: lgw2test-data
+          mountPath: /data/plugins/MythicMobs
+          subPath: plugins/MythicMobs
+          readOnly: true
+        - name: lgw2test-data
+          mountPath: /data/plugins/NameChangeAutomation/NameChangeInfo
+          subPath: plugins/NameChangeAutomation/NameChangeInfo
+          readOnly: true
+        - name: lgw2test-data
+          mountPath: /data/plugins/LeonGunWar/killlog
+          subPath: plugins/LeonGunWar/killlog
+          readOnly: true
+        - name: lgw2test-data
+          mountPath: /data/plugins/LeonGunWar/killsound
+          subPath: plugins/LeonGunWar/killsound
+          readOnly: true
+        - name: lgw2test-data
+          mountPath: /data/plugins/LeonGunWar/killparticle
+          subPath: plugins/LeonGunWar/killparticle
+          readOnly: true
+        - name: lgw2test-data
+          mountPath: /data/plugins/LeonGunWar/killAction.yml
+          subPath: plugins/LeonGunWar/killAction.yml
+          readOnly: true
+        - name: lgw2test-data
+          mountPath: /data/plugins/LeonGunWar/killLogs.yml
+          subPath: plugins/LeonGunWar/killLogs.yml
+          readOnly: true
+        - name: lgw2test-data
+          mountPath: /data/plugins/LeonGunWar/syogo.yml
+          subPath: plugins/LeonGunWar/syogo.yml
+          readOnly: true
       volumes:
       - name: server-data
         hostPath:
@@ -115,6 +170,14 @@ spec:
       - name: tab-config
         configMap:
           name: common-lgw2-server-tab-config
+      - name: msr-shared
+        hostPath:
+          path: /srv/lgw2test/shared
+          type: Directory
+      - name: lgw2test-data
+        hostPath:
+          path: /srv/lgw2test
+          type: Directory
       priorityClassName: minecraft-other-server
       terminationGracePeriodSeconds: 60 # 1分
 ---
