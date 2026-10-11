@@ -130,10 +130,14 @@ spec:
           mountPath: /data/plugins/koreomoiyo
           subPath: plugins/koreomoiyo
           readOnly: true
-        - name: lgw2test-data
+         name: lgw2test-data
           mountPath: /data/plugins/MythicMobs
           subPath: plugins/MythicMobs
           readOnly: true
+        - name: server-data
+          mountPath: /data/plugins/MythicMobs/spawners
+          subPath: plugins/MythicMobs/spawners
+          readOnly: false
         - name: lgw2test-data
           mountPath: /data/plugins/NameChangeAutomation/NameChangeInfo
           subPath: plugins/NameChangeAutomation/NameChangeInfo
