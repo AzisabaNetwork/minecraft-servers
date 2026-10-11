@@ -138,6 +138,30 @@ spec:
           mountPath: /data/plugins/NameChangeAutomation/NameChangeInfo
           subPath: plugins/NameChangeAutomation/NameChangeInfo
           readOnly: true
+        - name: lgw2test-data
+          mountPath: /data/plugins/LeonGunWar/killlog
+          subPath: plugins/LeonGunWar/killlog
+          readOnly: true
+        - name: lgw2test-data
+          mountPath: /data/plugins/LeonGunWar/killsound
+          subPath: plugins/LeonGunWar/killsound
+          readOnly: true
+        - name: lgw2test-data
+          mountPath: /data/plugins/LeonGunWar/killparticle
+          subPath: plugins/LeonGunWar/killparticle
+          readOnly: true
+        - name: lgw2test-data
+          mountPath: /data/plugins/LeonGunWar/killAction.yml
+          subPath: plugins/LeonGunWar/killAction.yml
+          readOnly: true
+        - name: lgw2test-data
+          mountPath: /data/plugins/LeonGunWar/killLogs.yml
+          subPath: plugins/LeonGunWar/killLogs.yml
+          readOnly: true
+        - name: lgw2test-data
+          mountPath: /data/plugins/LeonGunWar/syogo.yml
+          subPath: plugins/LeonGunWar/syogo.yml
+          readOnly: true
       volumes:
       - name: server-data
         hostPath:
