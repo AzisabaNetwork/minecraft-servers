@@ -135,6 +135,10 @@ spec:
           subPath: plugins/MythicMobs
           readOnly: true
         - name: server-data
+          mountPath: /data/plugins/MythicMobs/data
+          subPath: plugins/MythicMobs/data
+          readOnly: false
+        - name: server-data
           mountPath: /data/plugins/MythicMobs/spawners
           subPath: plugins/MythicMobs/spawners
           readOnly: false
