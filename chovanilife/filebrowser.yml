@@ -14,6 +14,11 @@ spec:
       labels:
         app: filebrowser-chovanilife
     spec:
+      # サーバー本体と同じsaba17のローカルディスクを扱うため、同じノードに固定する
+      nodeName: saba17
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
       containers:
         - name: filebrowser-chovanilife
           image: filebrowser/filebrowser
@@ -34,9 +39,11 @@ spec:
           ports:
             - containerPort: 8080
       volumes:
+        # 事前にsaba17で mkdir -p /srv/filebrowser-chovanilife && chown 1000:1000 /srv/filebrowser-chovanilife
         - name: filebrowser-database
-          persistentVolumeClaim:
-            claimName: filebrowser-chovanilife-database
+          hostPath:
+            path: /srv/filebrowser-chovanilife
+            type: Directory
         - name: filebrowser-config
           configMap:
             name: filebrowser-chovanilife-config
@@ -44,8 +51,9 @@ spec:
               - key: settings.json
                 path: settings.json
         - name: chovanilife-data
-          persistentVolumeClaim:
-            claimName: server-chovanilife-data-claim
+          hostPath:
+            path: /srv/chovanilife
+            type: Directory
       # priorityClassName: minecraft-other-server
 ---
 apiVersion: v1
@@ -62,30 +70,6 @@ data:
       "database": "/database/filebrowser.db",
       "root": "/srv"
     }
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: filebrowser-chovanilife-database
-spec:
-  storageClassName: nfs-client
-  accessModes:
-    - "ReadWriteMany"
-  resources:
-    requests:
-      storage: 1Gi
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: server-chovanilife-data-claim
-spec:
-  storageClassName: nfs-client
-  accessModes:
-    - "ReadWriteMany"
-  resources:
-    requests:
-      storage: 50Gi
 ---
 apiVersion: v1
 kind: Service

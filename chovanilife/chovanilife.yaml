@@ -40,6 +40,11 @@ spec:
             # EULAに同意する
             - name: EULA
               value: "true"
+            # /srv/chovanilife の所有者とfilebrowserの実行ユーザーに合わせる
+            - name: UID
+              value: "1000"
+            - name: GID
+              value: "1000"
             # サーバーの種類
             - name: TYPE
               value: CUSTOM
@@ -105,9 +110,12 @@ spec:
             - name: server-data
               mountPath: /data
       volumes:
+        # saba17のローカルディスクに保存する (filebrowserと共有)
+        # 事前にsaba17で mkdir -p /srv/chovanilife && chown 1000:1000 /srv/chovanilife
         - name: server-data
-          persistentVolumeClaim:
-            claimName: server-chovanilife-data-claim
+          hostPath:
+            path: /srv/chovanilife
+            type: Directory
       priorityClassName: minecraft-other-server
       terminationGracePeriodSeconds: 60 # 1分
 ---
