@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chovanilife-postgres
+spec:
+  selector:
+    matchLabels:
+      app: chovanilife-postgres
+  strategy:
+    type: Recreate
+  revisionHistoryLimit: 2
+  template:
+    metadata:
+      labels:
+        app: chovanilife-postgres
+    spec:
+      nodeName: saba17
+      containers:
+        - name: chovanilife-postgres
+          image: postgres:17-alpine
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              memory: "2Gi"
+          ports:
+            - containerPort: 5432
+          env:
+            - name: TZ
+              value: "Asia/Tokyo"
+            - name: POSTGRES_DB
+              value: chovanilife
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: server-chovanilife-db
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: server-chovanilife-db
+                  key: password
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          readinessProbe:
+            exec:
+              command: ["sh", "-c", "pg_isready -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\""]
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: postgres-data
+          hostPath:
+            path: /srv/chovanilife-postgres
+            type: Directory
+      terminationGracePeriodSeconds: 60
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chovanilife-postgres-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: chovanilife-postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
