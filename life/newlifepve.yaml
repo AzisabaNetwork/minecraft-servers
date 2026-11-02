@@ -108,11 +108,9 @@ spec:
               subPath: config.yml
       volumes:
         - name: server-data
-          persistentVolumeClaim:
-            claimName: server-lifenewpve-data-claim
-        - name: tab-config
-          configMap:
-            name: common-life-server-tab-config-with-pvelevel
+          hostPath:
+            path: /srv/chovanilife
+            type: Directory
       priorityClassName: minecraft-other-server
       terminationGracePeriodSeconds: 60 # 1分
 ---
