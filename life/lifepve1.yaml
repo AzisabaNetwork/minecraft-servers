@@ -89,7 +89,7 @@ spec:
             value: "1012"
           # Minecraftバージョン
           - name: VERSION
-            value: 1.15.2
+            value: 1.21.11
           # 初期・最大メモリ
           - name: MEMORY
             value: 8G # change to 10G after lifetown closes
