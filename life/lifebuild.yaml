@@ -89,7 +89,7 @@ spec:
               value: "1000"
             # Minecraftバージョン
             - name: VERSION
-              value: 1.21.11
+              value: 1.15.2
             # 初期・最大メモリ
             - name: MAX_MEMORY
               value: 4G
