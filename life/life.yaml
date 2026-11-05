@@ -99,7 +99,7 @@ spec:
           # JVMオプション
           - name: JVM_OPTS
             #value: "-XX:+UseZGC -XX:+ZGenerational -XX:+AlwaysPreTouch -XX:+UseStringDeduplication -javaagent:Log4j2Fix-1.0.4.jar=l -XX:MaxJavaStackTraceDepth=999999 -DPaper.IgnoreJavaVersion=true"
-            value: "-XX:MaxJavaStackTraceDepth=999999 -DPaper.IgnoreJavaVersion=true -javaagent:/data/datafixerpl-1.0.0.jar -Ddatafixerpl.verbose=true -XX:+UseCompactObjectHeaders -XX:+UseStringDeduplication"
+            value: "-XX:MaxJavaStackTraceDepth=999999 -DPaper.IgnoreJavaVersion=true -javaagent:/data/datafixerpl-1.0.0.jar -Ddatafixerpl.diag=true -Ddatafixerpl.diag.types=itemframe,glowitemframe -Ddatafixerpl.diag.file=/data/logs/datafixerpl-events.ndjson -Ddatafixerpl.verbose=true -XX:+UseCompactObjectHeaders -XX:+UseStringDeduplication"
           # View Distance
           - name: VIEW_DISTANCE
             value: "8"
