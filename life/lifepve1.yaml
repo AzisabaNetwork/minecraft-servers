@@ -20,6 +20,38 @@ spec:
         kuvel.azisaba.net/disable-name-suffix: "true"
     spec:
       nodeName: saba12
+      initContainers:
+      # 共有ベース(/srv/lifepve)は読み取り専用のため、書き込み可能な emptyDir へコピーしてから起動する
+      - name: seed-server-data
+        image: alpine:3.20
+        imagePullPolicy: Always
+        command:
+        - sh
+        - -c
+        - |
+          set -eu
+          # worlds / logs は個別ボリュームで上書きするのでコピーしない
+          # (ベースは lifepve のデータディレクトリを共有しているため、コピーするとワールド全体を複製してしまう)
+          find /src -mindepth 1 -maxdepth 1 \
+            ! -name worlds ! -name logs \
+            -exec cp -a {} /data/ \;
+          # ベース側の古い remap インデックスを引き継がず Paper に作り直させる
+          rm -rf /data/plugins/.paper-remapped
+          echo "Seeded /data from read-only base"
+          du -sh /data
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "2000m"
+            memory: "512Mi"
+        volumeMounts:
+        - name: server-data
+          mountPath: /src
+          readOnly: true
+        - name: server-data-rw
+          mountPath: /data
       containers:
       - name: server-lifepve1
         # Dockerイメージの指定
@@ -102,6 +134,10 @@ spec:
           # JVMオプション
           - name: JVM_OPTS
             value: "-DPaper.ignoreWorldDataVersion=true -DPaper.IgnoreJavaVersion=true -XX:+UseCompactObjectHeaders"
+          # 共有ベース由来の libraries を削除対象にしない
+          # (itzg/minecraft-server の scripts/start-deployPaper では既定 true)
+          - name: CLEAN_SERVER_LIBRARIES
+            value: "false"
           # yml内のCFG_なんとかを置き換えるためのもの
           - name: ENV_VARIABLE_PREFIX
             value: "CFG_"
@@ -136,9 +172,8 @@ spec:
           failureThreshold: 60 # 600秒
           periodSeconds: 10
         volumeMounts:
-        - name: server-data
+        - name: server-data-rw
           mountPath: /data
-          readOnly: true
         - name: raid-storage-pve-plugins
           mountPath: /mnt/raid/srv/lifepve/plugins
           readOnly: true
@@ -232,6 +267,9 @@ spec:
         hostPath:
           path: /srv/lifepve
           type: Directory
+      # 書き込み可能な作業用。/data の永続データは pve1-data / raid-storage 側で担保する
+      - name: server-data-rw
+        emptyDir: {}
       - name: itemfixer-data
         hostPath:
           path: /mnt/raid/srv/life/plugins/ItemFixer
