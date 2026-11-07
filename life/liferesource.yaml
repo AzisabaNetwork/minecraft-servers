@@ -73,7 +73,7 @@ spec:
             value: "true"
           # 描画距離
           - name: VIEW_DISTANCE
-            value: "6"
+            value: "11"
           # 統計情報をMojangに送信する
           - name: SNOOPER_ENABLED
             value: "false"
