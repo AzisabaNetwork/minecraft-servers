@@ -70,7 +70,7 @@ spec:
           - name: JVM_OPTS
             value: "-XX:MaxJavaStackTraceDepth=999999 -DPaper.IgnoreJavaVersion=true -XX:+UseCompactObjectHeaders -XX:+UseStringDeduplication"
           - name: VIEW_DISTANCE
-            value: "8"
+            value: "20"
           - name: ENV_VARIABLE_PREFIX
             value: "CFG_"
           - name: CFG_POD_NAME
