@@ -166,8 +166,14 @@ spec:
     app: server-lifebuild
     stage: production
   ports:
-    - "25565:25565"
-    - "24454:24454/udp"
+    - name: minecraft
+      protocol: TCP
+      port: 25565
+      targetPort: 25565
+    - name: voicechat
+      protocol: UDP
+      port: 24454
+      targetPort: 24454
 ---
 apiVersion: v1
 kind: Service
