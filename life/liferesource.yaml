@@ -103,7 +103,7 @@ spec:
           #  value: "log4j2Fix.loadReflectionUtil:true"
           # JVMオプション
           - name: JVM_OPTS
-            value: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -DPaper.IgnoreJavaVersion=true -XX:+UseCompactObjectHeaders -javaagent:PaperMixin-1.0.0-SNAPSHOT-all.jar"
+            value: "-Dmixin.debug=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -DPaper.IgnoreJavaVersion=true -XX:+UseCompactObjectHeaders -javaagent:PaperMixin-1.0.0-SNAPSHOT-all.jar"
           # yml内のCFG_なんとかを置き換えるためのもの
           - name: ENV_VARIABLE_PREFIX
             value: "CFG_"
