@@ -166,8 +166,8 @@ spec:
     app: server-lifebuild
     stage: production
   ports:
-    - port: 25565
-      targetPort: 25565
+    - "25565:25565"
+    - "24454:24454/udp"
 ---
 apiVersion: v1
 kind: Service
