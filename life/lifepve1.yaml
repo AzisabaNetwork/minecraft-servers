@@ -24,21 +24,29 @@ spec:
       # 共有ベース(/srv/lifepve)は読み取り専用のため、書き込み可能な emptyDir へコピーしてから起動する
       - name: seed-server-data
         image: alpine:3.20
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         command:
         - sh
         - -c
         - |
           set -eu
-          # worlds / logs は個別ボリュームで上書きするのでコピーしない
-          # (ベースは lifepve のデータディレクトリを共有しているため、コピーするとワールド全体を複製してしまう)
+          start=$(date +%s)
           find /src -mindepth 1 -maxdepth 1 \
-            ! -name worlds ! -name logs \
+            ! -name worlds ! -name logs ! -name plugins \
+            ! -name newplugins ! -name plugins-backup \
+            ! -name crash-reports ! -name 'hs_err_*' ! -name 'paper-1.15.2-*.jar' \
             -exec cp -a {} /data/ \;
-          # ベース側の古い remap インデックスを引き継がず Paper に作り直させる
-          rm -rf /data/plugins/.paper-remapped
-          echo "Seeded /data from read-only base"
-          du -sh /data
+          mkdir -p /data/plugins
+          find /src/plugins -mindepth 1 -maxdepth 1 \
+            ! -name .paper-remapped \
+            ! -name MythicMobs ! -name ItemFixer ! -name TAB ! -name LunaChat \
+            ! -name BuycraftX ! -name Shopkeepers ! -name Essentials \
+            ! -name ScriptBlockPlus ! -name JoinNotifier ! -name LifeCore \
+            ! -name AzisabaAPI ! -name PlayerLimit ! -name FastAsyncWorldEdit \
+            ! -name AzisabaAds ! -name PlayerIgnore \
+            -exec cp -a {} /data/plugins/ \;
+ 
+          echo "Seeded /data from read-only base in $(( $(date +%s) - start ))s"
         resources:
           requests:
             cpu: "100m"
@@ -65,7 +73,8 @@ spec:
         # 1.20.5以降 ... 21
         image: itzg/minecraft-server:java25
         workingDir: /data
-        imagePullPolicy: Always
+        # 毎回のイメージ取得を避ける(更新したいときは一時的に Always にするか、ノードで docker/crictl pull する)
+        imagePullPolicy: IfNotPresent
         resources:
           requests:
             memory: "8Gi"
@@ -83,6 +92,8 @@ spec:
           # サーバーの種類
           - name: TYPE
             value: PAPER
+          - name: PAPER_BUILD
+            value: "132"
           # 最適化されたJVMフラグを使用する
           - name: USE_AIKAR_FLAGS
             value: "true"
@@ -135,7 +146,6 @@ spec:
           - name: JVM_OPTS
             value: "-DPaper.ignoreWorldDataVersion=true -DPaper.IgnoreJavaVersion=true -XX:+UseCompactObjectHeaders"
           # 共有ベース由来の libraries を削除対象にしない
-          # (itzg/minecraft-server の scripts/start-deployPaper では既定 true)
           - name: CLEAN_SERVER_LIBRARIES
             value: "false"
           # yml内のCFG_なんとかを置き換えるためのもの
@@ -174,6 +184,9 @@ spec:
         volumeMounts:
         - name: server-data-rw
           mountPath: /data
+        - name: pve1-data
+          mountPath: /data/plugins/.paper-remapped
+          subPath: plugins/.paper-remapped
         - name: raid-storage-pve-plugins
           mountPath: /mnt/raid/srv/lifepve/plugins
           readOnly: true
@@ -267,7 +280,6 @@ spec:
         hostPath:
           path: /srv/lifepve
           type: Directory
-      # 書き込み可能な作業用。/data の永続データは pve1-data / raid-storage 側で担保する
       - name: server-data-rw
         emptyDir: {}
       - name: itemfixer-data
