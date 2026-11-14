@@ -21,8 +21,10 @@ spec:
     spec:
       nodeName: saba12
       initContainers:
-      # 共有ベース(/srv/lifepve)は読み取り専用のため、書き込み可能な emptyDir へコピーしてから起動する
-      - name: seed-server-data
+      # 共有ベース(/srv/lifepve)は読み取り専用なので、Paper が起動時に書き込むパスだけを
+      # このサーバー専用の書き込み可能ボリューム (/srv/lifepve2) に用意する。
+      # 既に中身があれば触らないので、2回目以降の起動はほぼ何もしない。
+      - name: seed-paper-writable
         image: alpine:3.20
         imagePullPolicy: IfNotPresent
         command:
@@ -31,22 +33,62 @@ spec:
         - |
           set -eu
           start=$(date +%s)
-          find /src -mindepth 1 -maxdepth 1 \
-            ! -name worlds ! -name logs ! -name plugins \
-            ! -name newplugins ! -name plugins-backup \
-            ! -name crash-reports ! -name 'hs_err_*' ! -name 'paper-1.15.2-*.jar' \
-            -exec cp -a {} /data/ \;
-          mkdir -p /data/plugins
-          find /src/plugins -mindepth 1 -maxdepth 1 \
-            ! -name .paper-remapped \
-            ! -name MythicMobs ! -name ItemFixer ! -name TAB ! -name LunaChat \
-            ! -name BuycraftX ! -name Shopkeepers ! -name Essentials \
-            ! -name ScriptBlockPlus ! -name JoinNotifier ! -name LifeCore \
-            ! -name AzisabaAPI ! -name PlayerLimit ! -name FastAsyncWorldEdit \
-            ! -name AzisabaAds ! -name PlayerIgnore \
-            -exec cp -a {} /data/plugins/ \;
 
-          echo "Seeded /data from read-only base in $(( $(date +%s) - start ))s"
+          # ファイル: 実体が無いときだけベースからコピーする。
+          # kubelet は subPath が無いと空ディレクトリを先に作るので、それは消してから置く。
+          seed_file() {
+            src="$1"
+            dst="$2"
+            if [ -d "$dst" ]; then
+              if [ -n "$(ls -A "$dst")" ]; then
+                echo "WARN: $dst is a non-empty directory, leaving it" >&2
+                return 0
+              fi
+              rmdir "$dst"
+            fi
+            if [ -s "$dst" ]; then
+              return 0
+            fi
+            if [ -s "$src" ]; then
+              cp -f "$src" "$dst"
+            else
+              : > "$dst"
+            fi
+          }
+
+          # ディレクトリ: 空のときだけベースから中身をコピーする
+          seed_dir() {
+            src="$1"
+            dst="$2"
+            mkdir -p "$dst"
+            if [ -n "$(ls -A "$dst")" ]; then
+              return 0
+            fi
+            if [ -d "$src" ]; then
+              # 属性保持に失敗する環境でも中身はコピーしたいので fallback する
+              cp -a "$src/." "$dst/" 2>/dev/null || cp -R "$src/." "$dst/"
+            fi
+          }
+
+          # Paper が起動時に上書きするファイル
+          for f in bukkit.yml spigot.yml commands.yml help.yml; do
+            seed_file "/base/$f" "/data/$f"
+          done
+          # Paper が起動時に上書きするディレクトリ
+          # libraries: SpigotLibraryLoader がプラグインの依存をダウンロードする
+          # versions/cache: paperclip が Paper jar を展開・キャッシュする
+          for d in config crash-reports libraries versions cache; do
+            seed_dir "/base/$d" "/data/$d"
+          done
+
+          # プラグインが書き込む状態ディレクトリ。RAID 側をマウントしているので
+          # 初回だけベースから内容を引き継ぐ (以降は各サーバー専用の状態になる)
+          for d in BuildToolPlus/playerdata CraftGUI/playerdata CraftGUI/logs \
+                   CratesPlus ImageOnMap/maps AdvancementFilter; do
+            seed_dir "/base/plugins/$d" "/raid/plugins/$d"
+          done
+
+          echo "Seeded Paper writable paths in $(( $(date +%s) - start ))s"
         resources:
           requests:
             cpu: "100m"
@@ -56,10 +98,12 @@ spec:
             memory: "512Mi"
         volumeMounts:
         - name: server-data
-          mountPath: /src
+          mountPath: /base
           readOnly: true
-        - name: server-data-rw
+        - name: pve2-data
           mountPath: /data
+        - name: raid-storage
+          mountPath: /raid
       containers:
       - name: server-lifepve2
         # Dockerイメージの指定
@@ -145,6 +189,7 @@ spec:
           # JVMオプション
           - name: JVM_OPTS
             value: "-DPaper.ignoreWorldDataVersion=true -DPaper.IgnoreJavaVersion=true -XX:+UseCompactObjectHeaders"
+          # 共有ベース由来の libraries を削除対象にしない
           - name: CLEAN_SERVER_LIBRARIES
             value: "false"
           # yml内のCFG_なんとかを置き換えるためのもの
@@ -181,11 +226,43 @@ spec:
           failureThreshold: 60 # 600秒
           periodSeconds: 10
         volumeMounts:
-        - name: server-data-rw
+        # 共有ベース(/srv/lifepve)は読み取り専用。書き込みが必要なパスだけ個別に上書きする
+        - name: server-data
           mountPath: /data
+          readOnly: true
+        # Paper が起動時に書き込むパス (読み取り専用のままだと EROFS で起動できない)
+        - name: pve2-data
+          mountPath: /data/config
+          subPath: config
+        - name: pve2-data
+          mountPath: /data/crash-reports
+          subPath: crash-reports
+        # SpigotLibraryLoader が依存ライブラリをダウンロードする
+        - name: pve2-data
+          mountPath: /data/libraries
+          subPath: libraries
+        # paperclip が Paper jar を展開・キャッシュする
+        - name: pve2-data
+          mountPath: /data/versions
+          subPath: versions
+        - name: pve2-data
+          mountPath: /data/cache
+          subPath: cache
         - name: pve2-data
           mountPath: /data/plugins/.paper-remapped
           subPath: plugins/.paper-remapped
+        - name: pve2-data
+          mountPath: /data/bukkit.yml
+          subPath: bukkit.yml
+        - name: pve2-data
+          mountPath: /data/spigot.yml
+          subPath: spigot.yml
+        - name: pve2-data
+          mountPath: /data/commands.yml
+          subPath: commands.yml
+        - name: pve2-data
+          mountPath: /data/help.yml
+          subPath: help.yml
         - name: raid-storage-pve-plugins
           mountPath: /mnt/raid/srv/lifepve/plugins
           readOnly: true
@@ -237,13 +314,29 @@ spec:
         - name: raid-storage
           mountPath: /data/plugins/Shopkeepers
           subPath: plugins/Shopkeepers
-        - name: server-data
+        # Essentials は usermap.bin / uuids.bin をディレクトリ直下に書くので
+        # userdata だけでなくディレクトリ全体を RAID 側に置く
+        - name: raid-storage
           mountPath: /data/plugins/Essentials
           subPath: plugins/Essentials
-          readOnly: true
         - name: raid-storage
-          mountPath: /data/plugins/Essentials/userdata
-          subPath: plugins/Essentials/userdata
+          mountPath: /data/plugins/BuildToolPlus/playerdata
+          subPath: plugins/BuildToolPlus/playerdata
+        - name: raid-storage
+          mountPath: /data/plugins/CraftGUI/playerdata
+          subPath: plugins/CraftGUI/playerdata
+        - name: raid-storage
+          mountPath: /data/plugins/CraftGUI/logs
+          subPath: plugins/CraftGUI/logs
+        - name: raid-storage
+          mountPath: /data/plugins/CratesPlus
+          subPath: plugins/CratesPlus
+        - name: raid-storage
+          mountPath: /data/plugins/ImageOnMap/maps
+          subPath: plugins/ImageOnMap/maps
+        - name: raid-storage
+          mountPath: /data/plugins/AdvancementFilter
+          subPath: plugins/AdvancementFilter
         - name: server-data
           mountPath: /data/plugins/ScriptBlockPlus
           subPath: plugins/ScriptBlockPlus
@@ -279,8 +372,6 @@ spec:
         hostPath:
           path: /srv/lifepve
           type: Directory
-      - name: server-data-rw
-        emptyDir: {}
       - name: itemfixer-data
         hostPath:
           path: /srv/life/plugins/ItemFixer
